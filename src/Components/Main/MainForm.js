@@ -12,12 +12,7 @@ const MainForm = ({ users }) => {
         {users.length > 0 && (
           <ul>
             {users.map((user) => (
-              <div>
-                <span>
-                  {/* Using getter for lesson Object to display name */}
-                  <li key={user.id}>{user.get("username")}</li>{" "}
-                </span>
-              </div>
+                <li key={user.id}>{user.attributes['username']}</li>
             ))}
           </ul>
         )}

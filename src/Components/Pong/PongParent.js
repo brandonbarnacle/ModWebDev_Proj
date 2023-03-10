@@ -44,11 +44,7 @@ const PongParent = () => {
             {scores.length > 0 && (
                 <ul>
                     {scores.map((score) => (
-                    <div>
-                        <span>
-                            <li key={score.id}>{score.attributes['score']}</li>
-                        </span>
-                    </div>
+                        <li key={score.id}>{score.attributes['score']}</li>
                     ))}
                 </ul>
             )}
