@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllUsers } from "../../Common/Services/LearnService";
+import { getAllUsers } from "../../Common/Services/User";
 import MainForm from "./MainForm";
 
 /* STATEFUL PARENT COMPONENT */
