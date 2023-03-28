@@ -35,6 +35,17 @@ const PongParent = () => {
                         This is placehold page for {game.attributes['game_title']}!
                     </h2>
                     <div>
+                        <canvas id="gl-canvas" width="512" height="512"></canvas>
+                        <div>
+                            <button id="speed-up">Ball Speed +</button>
+                            <button id="slow-down">Ball Speed -</button>
+                            <button id="paddle-left">Paddle Left</button>
+                            <button id="paddle-right">Paddle Right</button>
+                            <h2>
+                                Bounces:
+                                <p id="num-bounces" style={{display:'inline'}}></p>
+                            </h2>
+                        </div>
                         <PongChild game={game}/>
                     </div>
                     <h4>Past Scores for {game.attributes['game_title']} (Via a One-To-Many Relationship):</h4>
