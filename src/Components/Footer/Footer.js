@@ -8,6 +8,10 @@ const Footer = () => (
         <Link to="/about">About</Link>
         &nbsp;&nbsp;
         <Link to="/pong">Pong</Link>
+        &nbsp;&nbsp;
+        <Link to="/auth/login">Login</Link>
+        &nbsp;&nbsp;
+        <Link to="/auth/register">Register</Link>
     </div>
   </footer>
 );
