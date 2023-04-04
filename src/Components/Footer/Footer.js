@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import "../../footer_styles.css";
 
 const Footer = () => (
   <footer>
-    <div>
+    <div class="navigation">
         <Link to="/">Home</Link>
         &nbsp;&nbsp;
         <Link to="/about">About</Link>
