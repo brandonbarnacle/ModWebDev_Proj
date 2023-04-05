@@ -97,7 +97,6 @@ const PongChild = ({game}) => {
             ballVelocityY = -ballVelocityY;
             }
             if (ballPosition[1] - ballRadius < -1.0) {
-            alert("Game Over!");
             gameOver = true;
             } else {
             ballPosition[0] += ballVelocityX;
