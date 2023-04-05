@@ -11,6 +11,7 @@ This will keep track to all the changes made in Brandon and Patrick's Web Dev Pr
 
 ### Changed
 - Some routing was changed to incorporate protected routing
+- changed the footer so it has a style now, the style is just a work in progress
 
 ### Fixed
 

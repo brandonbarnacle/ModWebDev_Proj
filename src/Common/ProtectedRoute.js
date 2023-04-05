@@ -16,6 +16,7 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
         // if the user is unauthorized...
         else
         {
+            alert("You need to log in first to play!");
             navigate("/auth/login");
         }
       }, []);

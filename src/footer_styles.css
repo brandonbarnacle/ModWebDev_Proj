@@ -1,0 +1,19 @@
+.navigation {
+    /* flexbox styles */
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+
+    list-style: none;
+    margin: 0;
+    background-color: #00ABE4;
+}
+
+.navigation div {
+    display: block;
+    padding: 4px;
+  }
+
+.navigation div:hover {
+    background: #89CFF0;
+}

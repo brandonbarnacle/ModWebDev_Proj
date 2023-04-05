@@ -1,17 +1,18 @@
 import { Link } from "react-router-dom";
+import "../../footer_styles.css";
 
 const Footer = () => (
   <footer>
-    <div>
-        <Link to="/">Home</Link>
+    <div class="navigation">
+        <div><Link to="/" style={{textDecoration: 'none', color: 'white'}}>Home</Link></div>
         &nbsp;&nbsp;
-        <Link to="/about">About</Link>
+        <div><Link to="/about" style={{textDecoration: 'none', color: 'white'}}>About</Link></div>
         &nbsp;&nbsp;
-        <Link to="/pong">Pong</Link>
+        <div><Link to="/pong" style={{textDecoration: 'none', color: 'white'}}>Pong</Link></div>
         &nbsp;&nbsp;
-        <Link to="/auth/login">Login</Link>
+        <div><Link to="/auth/login" style={{textDecoration: 'none', color: 'white'}}>Login</Link></div>
         &nbsp;&nbsp;
-        <Link to="/auth/register">Register</Link>
+        <div><Link to="/auth/register" style={{textDecoration: 'none', color: 'white'}}>Register</Link></div>
     </div>
   </footer>
 );
