@@ -40,6 +40,17 @@ export const loginUser = (currUser) => {
     });
 };
 
+export const logoutUser = () => {
+    return Parse.User.logOut()
+    .catch((error) => {
+        console.warn(`Error: ${error.message}`);
+    });
+};
+
 export const checkUser = () => {
   return Parse.User.current()?.authenticated;
 };
+
+export const currUser = () => {
+    return Parse.User.current();
+}
