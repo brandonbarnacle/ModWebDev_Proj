@@ -7,9 +7,6 @@ import frag from "../../Common/WebGL/Shaders/Pong/pong-frag.js";
 
 const PongChild = ({game}) => {
 
-    console.log(vert);
-    console.log(frag);
-
     // Variables for WedGL script
 
     var gl;
@@ -126,8 +123,6 @@ const PongChild = ({game}) => {
     var canvasId = "gl-canvas";
 
     var canvas = document.getElementById(canvasId);
-
-    console.log(canvas);
 
     gl = setupWebGL(canvas);
     if (!gl) {

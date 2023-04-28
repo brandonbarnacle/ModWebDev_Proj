@@ -5,7 +5,7 @@ import { checkUser } from "../Components/Auth/AuthService";
 const ProtectedRoute = ({ element: Component, ...rest }) => {
     const navigate = useNavigate();
 
-    const [flag, setFlag] = useState(false);
+    //const [flag, setFlag] = useState(false);
 
     useEffect(() => {
         // if the user is authorized...
@@ -17,7 +17,7 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
         else
         {
             alert("You need to log in first to play!");
-            navigate("/auth/login");
+            //navigate("/auth/login");
         }
       }, []);
 
