@@ -1,0 +1,40 @@
+.authform{
+    width: 90%;
+}
+
+.authform label{
+    color: var(--text-background);
+    font-family: 'Noto Sans Display', sans-serif;
+}
+
+.authform .form-group{
+    margin-bottom: 10px;
+}
+
+.authform input{
+    outline: none;
+    border: none;
+    background: transparent;
+    color: var(--text-background);
+    border-bottom: 1px solid white;
+    padding: 5px 0;
+    width: 100%;
+}
+
+.authform button{
+    background: var(--action);
+    color: var(--foreground);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin: 10px 0;
+    width: 100%;
+    font-family: 'Noto Sans Display', sans-serif;
+    font-weight: 500;
+    transition: 0.3s;
+    box-shadow: 0px 0px 5px black;
+}
+
+.authform button:hover {
+    background: var(--action-hover);
+}

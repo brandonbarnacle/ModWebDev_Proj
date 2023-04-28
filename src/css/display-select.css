@@ -1,0 +1,27 @@
+.login-register-buttons {
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.auth-form-display-select-btn {
+    padding: 0;
+    background-color: transparent;
+    color: var(--action);
+    border: none;
+    width: 50%;
+    background: var(--foreground);
+    cursor: pointer;
+    font-family: 'Noto Sans Display', sans-serif;
+}
+
+.auth-form-display-select-btn:hover {
+    color: var(--action-hover);
+}
+
+.auth-form-display-select-btn.active{
+    color: var(--text-background);
+    background: transparent;
+    cursor: default;
+    border-top: 2px solid var(--text-background);
+}

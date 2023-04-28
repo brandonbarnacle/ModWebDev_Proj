@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@100;400;900&display=swap');
+
+:root {
+    --background: #0b132b;
+    --background-trans: rgba(11, 19, 43, 0.8);
+    --foreground: #1c2541;
+    --accent: #3a506b;
+    --action: #80e5e3;
+    --action-hover: #BBF4F3;
+    --text-background: #ffffff;
+}
+
+body {
+    margin:0;
+    padding:0;
+}

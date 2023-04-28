@@ -1,0 +1,51 @@
+.verify-form {
+    z-index: 1;
+    color: var(--text-background);
+    font-family: 'Noto Sans Display', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.verify-form h2{
+    font-weight: 100;
+    font-size: 40px;
+    margin: 10px;
+}
+
+.verify-form h3{
+    font-weight: 500;
+    font-size: 16px;
+    margin: 10px;
+    margin-top: 0px;
+    width: 90%;
+    text-align: center;
+}
+
+.verify-form h3 b{
+    color: var(--action);
+}
+
+.verify-form-buttons-wrapper{
+    display: flex;
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+.verify-form button{
+    background: var(--action);
+    color: var(--foreground);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin: 10px 5px;
+    font-family: 'Noto Sans Display', sans-serif;
+    font-weight: 500;
+    transition: 0.3s;
+    box-shadow: 0px 0px 5px black;
+    width: 50%;
+}
+
+.verify-form button:hover {
+    background: var(--action-hover);
+}

@@ -1,9 +1,10 @@
 import React from "react";
+import '../../css/auth-form.css';
 
 const AuthForm = ({ user, isLogin, onChange, onSubmit }) => {
 
   return (
-    <form onSubmit={onSubmit} autoComplete="off">
+    <form onSubmit={onSubmit} autoComplete="off" class="authform">
     {!isLogin ? 
     <div>
         <div className="form-group">
