@@ -5,7 +5,7 @@ import vert from "../../Common/WebGL/Shaders/Pong/pong-vert.js";
 import frag from "../../Common/WebGL/Shaders/Pong/pong-frag.js";
 import Parse from "parse";
 
-const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, updateYPlayerTwo, setIsWinner, setGameOver, isPlayerOne, velX, velY, ballX, ballY, playerOneScore, playerTwoScore}) => {
+const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, updateYPlayerTwo, setIsWinner, setGameOver, isPlayerOne, velX, velY, ballX, ballY, playerOneScoreArg, playerTwoScoreArg, setPlayerTwoScore, setPlayerOneScore, setBallX, setBallY, setVelX, setVelY}) => {
     // Variables for WedGL script
     var gl;
     var vertices = [];
@@ -20,11 +20,10 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
     var extentBall = 0.1;
     var paddleMove = 0.1; 
     var playerOne;
-    var tickRate = 10; 
-    var nextTick;
-    var currentTime;
 
     var gameOn;
+
+    console.log("ball x position: ", ballX);
     
     
     // create WebGL context which is a JavaScript object that contains all the WebGL
@@ -78,20 +77,20 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
     function setup() {
         // set up score
-        playerOneScore = 0;
-        playerTwoScore = 0;
+        playerOneScore = playerOneScoreArg;
+        playerTwoScore = playerTwoScoreArg;
         document.getElementById("score").innerHTML = "Player One: " + playerOneScore + " | Player Two: " + playerTwoScore;
 
         // get center of ball, set up radius
-        xCenterBall = 0.0;
-        yCenterBall = 0.0;
+        xCenterBall = ballX;
+        yCenterBall = ballY;
         var p = vec2(0.0);
         vertices.push(p);
         var radius = 0.1;
 
         // set initial ball velocity, random side start
-        yVelocityBall = 0.0;
-        xVelocityBall = 0.02; 
+        yVelocityBall = velY;
+        xVelocityBall = velX; 
 
         // set up rest of ball points
         var increment = Math.PI/36;
@@ -121,10 +120,6 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
         // set up player one center
         xPlayerTwo = 2.0;
         yPlayerTwo = yPlayerTwoArg;
-
-        // get current time
-        currentTime = new Date();
-        nextTick = currentTime.getTime() + 3000;
     }
 
     function render() {
@@ -157,115 +152,118 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
         // the next 4 points are player one
         gl.drawArrays( gl.TRIANGLE_FAN, 78, 4 );
 
-        if(gameOn && currentTime.getTime() >= nextTick){
+        if(gameOn){
             animate();
         } 
-        else {  
-            currentTime = new Date();
-        }
+
         window.requestAnimFrame(render);
     }
 
     function animate() {
-        // increment xCenter and yCenter
-        xCenterBall += xVelocityBall;
-        yCenterBall += yVelocityBall;
+        // update all from data base;
+        yPlayerOne = yPlayerOneArg;
+        yPlayerTwo = yPlayerTwoArg;
+        xCenterBall = ballX;
+        yCenterBall = ballY;
+        xVelocityBall = velX;
+        yVelocityBall = velY;
+        playerOneScore = playerOneScoreArg;
+        playerTwoScore = playerTwoScoreArg;
+        document.getElementById("score").innerHTML = "Player One: " + playerOneScore + " | Player Two: " + playerTwoScore;
 
-        // get the other player's paddle position
-        if(playerOne === 0){
-            yPlayerTwo = yPlayerTwoArg;
-        }
-        else {
-            yPlayerOne = yPlayerOneArg;
-        }
+        if (playerOne === 0){
+            // increment xCenter and yCenter
+            setBallX(xCenterBall + xVelocityBall);
+            setBallX(yCenterBall + yVelocityBall);
 
-        // check if hit player one paddle
-        if (xCenterBall-extentBall <= xPlayerOne+0.1){
-            if(yCenterBall-extentBall/2 <= yPlayerOne+0.4 && yCenterBall-extentBall/2 >= yPlayerOne-0.4){
-                // reverse x velocity
-                xCenterBall = -1.9 + extentBall;
-                xVelocityBall = -xVelocityBall;
-                // calculate y angle velocity
-                calcYVelocity(yPlayerOne);
+            // check if hit player one paddle
+            if (xCenterBall-extentBall <= xPlayerOne+0.1){
+                if(yCenterBall-extentBall/2 <= yPlayerOne+0.4 && yCenterBall-extentBall/2 >= yPlayerOne-0.4){
+                    // reverse x velocity
+                    setBallX(-1.9 + extentBall);
+                    setVelX(-xVelocityBall);
+                    // calculate y angle velocity
+                    calcYVelocity(yPlayerOne);
+                }
+                else if(yCenterBall+extentBall/2 <= yPlayerOne+0.4 && yCenterBall+extentBall/2 >= yPlayerOne-0.4){
+                    setBallX(-1.9 + extentBall);
+                    setVelX(-xVelocityBall);
+                    // calculate y angle velocity
+                    calcYVelocity(yPlayerOne);
+                }
             }
-            else if(yCenterBall+extentBall/2 <= yPlayerOne+0.4 && yCenterBall+extentBall/2 >= yPlayerOne-0.4){
-                xCenterBall = -1.9 + extentBall;
-                xVelocityBall = -xVelocityBall;
-                // calculate y angle velocity
-                calcYVelocity(yPlayerOne);
+
+            // check if hit player two padde
+            else if (xCenterBall+extentBall >= xPlayerTwo-0.1){
+                if(yCenterBall-extentBall/2 <= yPlayerTwo+0.4 && yCenterBall-extentBall/2 >= yPlayerTwo-0.4) {
+                    setBallX(1.9 - extentBall);
+                    setVelX(-xVelocityBall);
+                    // calculate y angle velocity
+                    calcYVelocity(yPlayerTwo);
+                }
+                else if(yCenterBall+extentBall/2 <= yPlayerTwo+0.4 && yCenterBall+extentBall/2 >= yPlayerTwo-0.4) {
+                    setBallX(1.9 - extentBall);
+                    setVelX(-xVelocityBall);
+                    // calculate y angle velocity
+                    calcYVelocity(yPlayerTwo);
+                }
+            }
+
+            // check if hit top or bottom
+            if(yCenterBall+extentBall >= 1.0) {
+                setBallY(1.0 - extentBall);
+                setVelY(-yVelocityBall);
+            }
+            if(yCenterBall-extentBall <= -1.0){
+                setBallY(-1.0 + extentBall);
+                setVelY(-yVelocityBall);
+            }
+
+            // check if score
+            if(xCenterBall+extentBall >= 2.0) {
+                setVelY(0);
+                setVelX(0.02);
+                setPlayerOneScore(playerOneScore + 1);
+                gameOn = false;
+                setTimeout(() => {
+                    resetGame();
+                }, 2000);
+            } 
+            if(xCenterBall-extentBall <= -2.0) {
+                setVelY(0);
+                setVelX(-0.02);
+                setPlayerTwoScore(playerTwoScore + 1);
+                gameOn = false;
+                setTimeout(() => {
+                    resetGame();
+                }, 2000);
+            }
+
+            // check if game won
+            if(playerOneScore >= 3) {
+                gameOn = false;
+                if(playerOne === 0){
+                    setIsWinner(true);
+                }
+                setGameOver(true);
+                alert("Player One Won!");
+            }
+            if (playerTwoScore >= 3){
+                gameOn = false;
+                if(playerOne === 1){
+                    setIsWinner(true);
+                }
+                setGameOver(true);
+                alert("Player Two Won!");
             }
         }
-        // check if hit player two padde
-        else if (xCenterBall+extentBall >= xPlayerTwo-0.1){
-            if(yCenterBall-extentBall/2 <= yPlayerTwo+0.4 && yCenterBall-extentBall/2 >= yPlayerTwo-0.4) {
-                xCenterBall = 1.9 - extentBall;
-                xVelocityBall = -xVelocityBall;
-                // calculate y angle velocity
-                calcYVelocity(yPlayerTwo);
-            }
-            else if(yCenterBall+extentBall/2 <= yPlayerTwo+0.4 && yCenterBall+extentBall/2 >= yPlayerTwo-0.4) {
-                xCenterBall = 1.9 - extentBall;
-                xVelocityBall = -xVelocityBall;
-                calcYVelocity(yPlayerTwo);
-            }
-        }
-
-        // check if hit top or bottom
-        if(yCenterBall+extentBall >= 1.0) {
-            yCenterBall = 1.0 - extentBall;
-            yVelocityBall = -yVelocityBall;
-        }
-        if(yCenterBall-extentBall <= -1.0){
-            yCenterBall = -1.0 + extentBall;
-            yVelocityBall = -yVelocityBall; 
-        }
-
-        // check if score
-        if(xCenterBall+extentBall >= 2.0) {
-            yVelocityBall = 0.0;
-            xVelocityBall = 0.02;
-            playerOneScore += 1;
-            gameOn = false;
-            setTimeout(() => {
-                resetGame();
-            }, 2000);
-            document.getElementById("score").innerHTML = "Player One: " + playerOneScore + " | Player Two: " + playerTwoScore;
-        }  
-        if(xCenterBall-extentBall <= -2.0) {
-            yVelocityBall = 0.0;
-            xVelocityBall = -0.02;
-            playerTwoScore += 1; 
-            gameOn = false;
-            setTimeout(() => {
-                resetGame();
-            }, 2000);
-            document.getElementById("score").innerHTML = "Player One: " + playerOneScore + " | Player Two: " + playerTwoScore;
-        }
-
-        // check if game won
-        if (playerOneScore >= 3){
-            gameOn = false;
-            if(playerOne === 0){
-                setIsWinner(true);
-            }
-            setGameOver(true);
-            alert("Player One Won!");
-        }
-        if (playerTwoScore >= 3){
-            gameOn = false;
-            if(playerOne === 1){
-                setIsWinner(true);
-            }
-            setGameOver(true);
-            alert("Player Two Won!");
-        }
-
-        // set next tick
-        nextTick = currentTime.getTime() + tickRate;
-
     }
   
     function checkKey(e){
+        // set vars
+        var tempOne = yPlayerOne;
+        var tempTwo = yPlayerTwo;
+
         // setting up the event
         e = e || window.event;
 
@@ -273,35 +271,35 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
             // checking if up arrow
             if (e.keyCode === 38) {
                 if (playerOne === 0){
-                    yPlayerOne += paddleMove;
-                    if (yPlayerOne+0.4 >= 1.0){
-                        yPlayerOne = 0.6;
+                    tempOne += paddleMove;
+                    if (tempOne+0.4 >= 1.0){
+                        tempOne = 0.6;
                     }
-                    updateYPlayerOne(yPlayerOne);
+                    updateYPlayerOne(tempOne);
                 }
                 else {
-                    yPlayerTwo += paddleMove;
-                    if (yPlayerTwo+0.4 >= 1.0){
-                        yPlayerTwo = 0.6;
+                    tempTwo += paddleMove;
+                    if (tempTwo+0.4 >= 1.0){
+                        tempTwo = 0.6;
                     }
-                    updateYPlayerTwo(yPlayerTwo);
+                    updateYPlayerTwo(tempTwo);
                 }
             }
             // checking if down arrow
             else if (e.keyCode === 40){
                 if (playerOne === 0){
-                    yPlayerOne -= paddleMove;
-                    if (yPlayerOne-0.4 <= -1.0){
-                        yPlayerOne = -0.6;
+                    tempOne -= paddleMove;
+                    if (tempOne-0.4 <= -1.0){
+                        tempOne = -0.6;
                     }
-                    updateYPlayerOne(yPlayerOne);
+                    updateYPlayerOne(tempOne);
                 }
                 else {
-                   yPlayerTwo -= paddleMove;
-                    if (yPlayerTwo-0.4 <= -1.0){
-                        yPlayerTwo = -0.6;
+                   tempTwo -= paddleMove;
+                    if (tempTwo-0.4 <= -1.0){
+                        tempTwo = -0.6;
                     }
-                    updateYPlayerTwo(yPlayerTwo);
+                    updateYPlayerTwo(tempTwo);
                 }
             }
         }
@@ -311,25 +309,25 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
     function resetGame() {
         gameOn = true;
-        xCenterBall = 0.0;
-        yCenterBall = 0.0;
-        yPlayerOne = 0.0;
-        yPlayerTwo = 0.0;
+        setBallX(0);
+        setBallY(0);
+        updateYPlayerOne(0)
+        updateYPlayerTwo(0);
     }
 
     function calcYVelocity(player){
         if(yCenterBall > player){
             var amountYVelocity = yCenterBall - player;
             amountYVelocity = (amountYVelocity / 0.4) * Math.abs(xVelocityBall);
-            yVelocityBall = amountYVelocity;
+            setVelY(amountYVelocity);
         }
         else if (yCenterBall < player){
             var amountYVelocity = player - yCenterBall;
             amountYVelocity = (amountYVelocity / 0.4) * Math.abs(xVelocityBall) * -1;
-            yVelocityBall = amountYVelocity;
+            setVelY(amountYVelocity);
         }
         else {
-            yVelocityBall = 0;
+            setVelY(0);
         }
     }
 

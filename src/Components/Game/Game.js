@@ -193,8 +193,14 @@ const Game = ({currentUserReady, user}) => {
                 velY={velYState}
                 ballX={ballXState}
                 ballY={ballYState}
-                playerOneScore={playerOneScoreState}
-                playerTwoScore={playerTwoScoreState}
+                playerOneScoreArg={playerOneScoreState}
+                playerTwoScoreArg={playerTwoScoreState}
+                setPlayerTwoScore={setPlayerTwoScoreState}
+                setPlayerOneScore={setPlayerOneScoreState}
+                setBallX={setBallXState}
+                setBallY={setBallYState}
+                setVelX={setVelXState}
+                setVelY={setVelYState}
             />
         </div>
     );
