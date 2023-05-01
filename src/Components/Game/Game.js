@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Pong from "../Pong/Pong.js";
-import { testSub, findAvailableMatchUp, setUpSubscription, setPlayerOnePos, setPlayerTwoPos, setWinner, setActive } from "../../Common/Services/MatchUp.js";
+import { testSub, findAvailableMatchUp, setUpSubscription, setPlayerOnePos, setPlayerTwoPos, setWinner, setActive, setBallX, setBallY, setPlayerOneScore, setPlayerTwoScore, setVelX, setVelY } from "../../Common/Services/MatchUp.js";
 
 /* This module is a wrapper for whatever game is put in */
 const Game = ({currentUserReady, user}) => {
@@ -41,24 +41,35 @@ const Game = ({currentUserReady, user}) => {
                 var velX = object.get('velX');
                 setVelXState(velX);
 
+                console.log('velX: ', velX);
+
                 var velY = object.get('velY');
                 setVelYState(velY);
+
+                console.log('velY: ', velY);
 
                 var ballX = object.get('ballX');
                 setBallXState(ballX);
 
+                console.log('ballX: ', ballX);
+
                 var ballY = object.get('ballY');
                 setBallYState(ballY);
+
+                console.log('ballY: ', ballY);
 
                 var playerOneScore = object.get('playerOneScore');
                 setPlayerOneScoreState(playerOneScore);
 
+                console.log('playerOneScore: ', playerOneScore);
+
                 var playerTwoScore = object.get('playerTwoScore');
                 setPlayerTwoScoreState(playerTwoScore);
 
+                console.log('playerTwoScore: ', playerTwoScore);
+
               });
             console.log("the id: ", matchUp.id);
-            console.log(testsub);
         }
     }, [matchUp]);
     
@@ -93,61 +104,61 @@ const Game = ({currentUserReady, user}) => {
         }
     }, [currentPlayerLoaded, otherPlayerLoaded]);
 
-    useEffect(()=>{
-        if (matchUp)
-        {
-            setPlayerOnePos(matchUp, yPlayerOne);
-        }
-    }, [yPlayerOne, matchUp]);
+    // useEffect(()=>{
+    //     if (matchUp)
+    //     {
+    //         setPlayerOnePos(matchUp, yPlayerOne);
+    //     }
+    // }, [yPlayerOne, matchUp]);
 
-    useEffect(()=>{
-        if (matchUp)
-        {
-            setPlayerTwoPos(matchUp, yPlayerTwo);
-        }
-    }, [yPlayerTwo, matchUp]);
+    // useEffect(()=>{
+    //     if (matchUp)
+    //     {
+    //         setPlayerTwoPos(matchUp, yPlayerTwo);
+    //     }
+    // }, [yPlayerTwo, matchUp]);
 
-    useEffect(()=>{
-        if (matchUp)
-        {
-            setVelXState(matchUp, velXState);
-        }
-    }, [velXState, matchUp]);
+    // useEffect(()=>{
+    //     if (matchUp)
+    //     {
+    //         setVelX(matchUp, velXState);
+    //     }
+    // }, [velXState, matchUp]);
 
-    useEffect(()=>{
-        if (matchUp)
-        {
-            setVelYState(matchUp, velYState);
-        }
-    }, [velYState, matchUp]);
+    // useEffect(()=>{
+    //     if (matchUp)
+    //     {
+    //         setVelY(matchUp, velYState);
+    //     }
+    // }, [velYState, matchUp]);
 
-    useEffect(()=>{
-        if (matchUp)
-        {
-            setBallXState(matchUp, ballXState);
-        }
-    }, [ballXState, matchUp]);
+    // useEffect(()=>{
+    //     if (matchUp)
+    //     {
+    //         setBallX(matchUp, ballXState);
+    //     }
+    // }, [ballXState, matchUp]);
 
-    useEffect(()=>{
-        if (matchUp)
-        {
-            setBallYState(matchUp, ballYState);
-        }
-    }, [ballYState, matchUp]);
+    // useEffect(()=>{
+    //     if (matchUp)
+    //     {
+    //         setBallY(matchUp, ballYState);
+    //     }
+    // }, [ballYState, matchUp]);
 
-    useEffect(()=>{
-        if (matchUp)
-        {
-            setPlayerOneScoreState(matchUp, playerOneScoreState);
-        }
-    }, [playerOneScoreState, matchUp]);
+    // useEffect(()=>{
+    //     if (matchUp)
+    //     {
+    //         setPlayerOneScore(matchUp, playerOneScoreState);
+    //     }
+    // }, [playerOneScoreState, matchUp]);
 
-    useEffect(()=>{
-        if (matchUp)
-        {
-            setPlayerTwoScoreState(matchUp, playerTwoScoreState);
-        }
-    }, [playerTwoScoreState, matchUp]);
+    // useEffect(()=>{
+    //     if (matchUp)
+    //     {
+    //         setPlayerTwoScore(matchUp, playerTwoScoreState);
+    //     }
+    // }, [playerTwoScoreState, matchUp]);
 
     useEffect(()=>{
         if (matchUp && isWinner)
@@ -167,8 +178,8 @@ const Game = ({currentUserReady, user}) => {
                 yPlayerOneArg={yPlayerOne}
                 yPlayerTwoArg={yPlayerTwo}
                 startGame={readyToStart}
-                updateYPlayerOne={setYPlayerOne}
-                updateYPlayerTwo={setYPlayerTwo}
+                updateYPlayerOne={(newPlayerOnePos) => setPlayerOnePos(matchUp, newPlayerOnePos)}
+                updateYPlayerTwo={(newPlayerTwoPos) => setPlayerTwoPos(matchUp, newPlayerTwoPos)}
                 setIsWinner={setIsWinner}
                 setGameOver={setGameOver}
                 isPlayerOne={isPlayerOne}
@@ -178,12 +189,12 @@ const Game = ({currentUserReady, user}) => {
                 ballY={ballYState}
                 playerOneScoreArg={playerOneScoreState}
                 playerTwoScoreArg={playerTwoScoreState}
-                setPlayerTwoScore={setPlayerTwoScoreState}
-                setPlayerOneScore={setPlayerOneScoreState}
-                setBallX={setBallXState}
-                setBallY={setBallYState}
-                setVelX={setVelXState}
-                setVelY={setVelYState}
+                setPlayerTwoScore={(newPlayerOneScore) => setPlayerOneScore(matchUp, newPlayerOneScore)}
+                setPlayerOneScore={(newPlayerTwoScore) => setPlayerTwoScore(matchUp, newPlayerTwoScore)}
+                setBallX={(newBallX) => setBallX(matchUp, newBallX)}
+                setBallY={(newBallY) => setBallY(matchUp, newBallY)}
+                setVelX={(newVelX) => setVelX(matchUp, newVelX)}
+                setVelY={(newVelY) => setVelY(matchUp, newVelY)}
             />
         </div>
     );

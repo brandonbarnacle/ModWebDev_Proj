@@ -22,9 +22,6 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
     var playerOne;
 
     var gameOn;
-
-    console.log("ball x position: ", ballX);
-    
     
     // create WebGL context which is a JavaScript object that contains all the WebGL
     // functions and parameters
@@ -173,20 +170,20 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
         if (playerOne === 0){
             // increment xCenter and yCenter
-            setBallX(xCenterBall + xVelocityBall);
-            setBallX(yCenterBall + yVelocityBall);
+            // setBallX(xCenterBall + xVelocityBall);
+            // setBallX(yCenterBall + yVelocityBall);
 
             // check if hit player one paddle
             if (xCenterBall-extentBall <= xPlayerOne+0.1){
                 if(yCenterBall-extentBall/2 <= yPlayerOne+0.4 && yCenterBall-extentBall/2 >= yPlayerOne-0.4){
                     // reverse x velocity
-                    setBallX(-1.9 + extentBall);
+                    // setBallX(-1.9 + extentBall);
                     setVelX(-xVelocityBall);
                     // calculate y angle velocity
                     calcYVelocity(yPlayerOne);
                 }
                 else if(yCenterBall+extentBall/2 <= yPlayerOne+0.4 && yCenterBall+extentBall/2 >= yPlayerOne-0.4){
-                    setBallX(-1.9 + extentBall);
+                    // setBallX(-1.9 + extentBall);
                     setVelX(-xVelocityBall);
                     // calculate y angle velocity
                     calcYVelocity(yPlayerOne);
@@ -196,13 +193,13 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
             // check if hit player two padde
             else if (xCenterBall+extentBall >= xPlayerTwo-0.1){
                 if(yCenterBall-extentBall/2 <= yPlayerTwo+0.4 && yCenterBall-extentBall/2 >= yPlayerTwo-0.4) {
-                    setBallX(1.9 - extentBall);
+                    // setBallX(1.9 - extentBall);
                     setVelX(-xVelocityBall);
                     // calculate y angle velocity
                     calcYVelocity(yPlayerTwo);
                 }
                 else if(yCenterBall+extentBall/2 <= yPlayerTwo+0.4 && yCenterBall+extentBall/2 >= yPlayerTwo-0.4) {
-                    setBallX(1.9 - extentBall);
+                    // setBallX(1.9 - extentBall);
                     setVelX(-xVelocityBall);
                     // calculate y angle velocity
                     calcYVelocity(yPlayerTwo);
@@ -211,11 +208,11 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
             // check if hit top or bottom
             if(yCenterBall+extentBall >= 1.0) {
-                setBallY(1.0 - extentBall);
+                // setBallY(1.0 - extentBall);
                 setVelY(-yVelocityBall);
             }
             if(yCenterBall-extentBall <= -1.0){
-                setBallY(-1.0 + extentBall);
+                // setBallY(-1.0 + extentBall);
                 setVelY(-yVelocityBall);
             }
 
