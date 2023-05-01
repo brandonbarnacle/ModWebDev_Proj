@@ -42,8 +42,6 @@ export default function setupWebGL (canvas, opt_attribs) {
         return context;
     }
 
-    console.log(canvas);
-
     if (!canvas)
     {
         console.log('Invalid canvas item passed');

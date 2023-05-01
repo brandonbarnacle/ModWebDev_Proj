@@ -1,68 +1,119 @@
 import React, { useState, useEffect } from "react";
-import PongParent from "../Pong/PongParent.js";
-import { getMatchUp, findAvailableMatchUp } from "../../Common/Services/MatchUp.js";
+import Pong from "../Pong/Pong.js";
+import { getMatchUp, findAvailableMatchUp, setUpSubscription, setPlayerOnePos, setPlayerTwoPos, setWinner, setActive } from "../../Common/Services/MatchUp.js";
 
 /* This module is a wrapper for whatever game is put in */
 const Game = ({currentUserReady, user}) => {
 
     const [ currentPlayerLoaded, setCurrentPlayerLoaded ] = useState(false);
     const [ otherPlayerLoaded, setOtherPlayerLoaded ] = useState(false);
+    const [ readyToStart, setReadyToStart ] = useState(false);
     const [ matchUp, setMatchUp ] = useState(null);
+    const [ isPlayerOne, setIsPlayerOne ] = useState(false);
+    const [ subscription, setSubscription ] = useState(null);
+    const [ yPlayerOne, setYPlayerOne ] = useState(0);
+    const [ yPlayerTwo, setYPlayerTwo ] = useState(0);
+    const [ isWinner, setIsWinner ] = useState(false);
+    const [ gameOver, setGameOver ] = useState(false);
 
     useEffect(()=>{
         if(currentUserReady && user)
         {
-            console.log('Calling findAvailableMatchup()!');
             findAvailableMatchUp(user)
             .then((newMatchUp)=>{
                 setMatchUp(newMatchUp);
+                setCurrentPlayerLoaded(true);
+                if (newMatchUp.attributes.playerOne.id === user.id)
+                {
+                    setIsPlayerOne(true);
+                }
+                else if (newMatchUp.attributes.playerTwo.id === user.id)
+                {
+                    setIsPlayerOne(false);
+                }
             });
         }
-    },[user, currentUserReady]);
+    }, [user, currentUserReady]);
 
-    // async function setUpLiveQuery(){
-    //     client = new Parse.LiveQueryClient({
-    //         applicationId: '2FgDITUa7Ud9aTfc2n9m3mKUNMMXp9juemjAp0Cq',
-    //         serverURL: 'wss://feature6.b4a.io', 
-    //         javascriptKey: 'OEZ1ViibPs3KVyj6TtqbDw7CvYfwF1Bjkiw3aAU9'
-    //     });
-    //     client.open();
+    useEffect(() => {
+        if (currentPlayerLoaded && !otherPlayerLoaded)
+        {
+            console.log('Current player ready, waiting for other player.');
+        }
+        else if (currentPlayerLoaded && !otherPlayerLoaded)
+        {
+            console.log('Both players ready!');
+        }
+    }, [currentPlayerLoaded, otherPlayerLoaded]);
 
-    //     // set up query for the match
-    //     matchQuery = new Parse.Query('MatchUp');
-    //     matchQuery.equalTo('objectId', 'pS9b4vI0XQ');
-    //     // set up subscription for updates
-    //     subscription = client.subscribe(matchQuery);
+    useEffect(() => {
+        if (matchUp)
+        {
+            let newSubscription = setUpSubscription(matchUp);
+            setSubscription(newSubscription);
+        }
+    }, [matchUp]);
 
-    //     // find if player one or two
-    //     var currentUser = Parse.User.current();
-    //     theGame = await matchQuery.first();
+    useEffect(() => {
+        if(subscription && isPlayerOne)
+        {
+            subscription.on('update', (object) => {
+                var yPlayerOne = object.get('playerOnePos');
+                setYPlayerOne(yPlayerOne);
+            });
+        }
+        else if(subscription)
+        {
+            subscription.on('update', (object) => {
+                var yPlayerTwo = object.get('playerTwoPos');
+                setYPlayerTwo(yPlayerTwo);
+            });
+            subscription.on('update', (object) => {
+                var playerTwo = object.get('playerTwo');
+                if (playerTwo)
+                {
+                    setReadyToStart(true);
+                }
+            });
+        }
+    }, [subscription, isPlayerOne]);
 
-    //     if (currentUser.getUsername() === theGame.get('playerOne')['id']){
-    //         playerOne = 0;
-    //     }
-    //     else {
-    //         playerOne = 1;
-    //     }
+    useEffect(()=>{
+        if (matchUp)
+        {
+            setPlayerOnePos(matchUp, yPlayerOne);
+        }
+    }, [yPlayerOne, matchUp]);
 
-    //     // set up subscriptions
-    //     if (playerOne === 1) {
-    //         subscription.on('update', (object) => {
-    //             var temp = object.get('playerOnePos');
-    //             yPlayerOne = temp;
-    //     });
-    //     }
-    //     else if (playerOne === 0) {
-    //         subscription.on('update', (object) => {
-    //             var temp = object.get('playerTwoPos');
-    //             yPlayerTwo = temp;
-    //         });
-    //     }
-    // }
+    useEffect(()=>{
+        if (matchUp)
+        {
+            setPlayerTwoPos(matchUp, yPlayerTwo);
+        }
+    }, [yPlayerTwo, matchUp]);
+
+    useEffect(()=>{
+        if (matchUp && isWinner)
+        {
+            setActive(matchUp, false);
+            setWinner(matchUp, user);
+        }
+    }, [isWinner, matchUp, user]);
 
     return (
         <div>
-        <PongParent />
+            <canvas id="gl-canvas" width="1024" height="512"></canvas>
+            <div>
+                <h1 id="score"></h1>
+            </div>
+            <Pong 
+                yPlayerOneArg={yPlayerOne}
+                yPlayerTwoArg={yPlayerTwo}
+                startGame={readyToStart}
+                updateYPlayerOne={setYPlayerOne}
+                updateYPlayerTwo={setYPlayerTwo}
+                setIsWinner={setIsWinner}
+            />
         </div>
     );
 };

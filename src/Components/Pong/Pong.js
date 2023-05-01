@@ -5,7 +5,7 @@ import vert from "../../Common/WebGL/Shaders/Pong/pong-vert.js";
 import frag from "../../Common/WebGL/Shaders/Pong/pong-frag.js";
 import Parse from "parse";
 
-const PongChild = ({matchId, yPlayerOneArg, yPlayerTwoArg, playerOneScoreArg, playerTwoScoreArg, startGame, 
+const Pong = ({matchId, yPlayerOneArg, yPlayerTwoArg, playerOneScoreArg, playerTwoScoreArg, startGame, 
                     updateYPlayerOne, updateYPlayerTwo, updatePlayerOneScore, updatePlayerTwoScore}) => {
     // Variables for WedGL script
     var gl;
@@ -370,4 +370,4 @@ const PongChild = ({matchId, yPlayerOneArg, yPlayerTwoArg, playerOneScoreArg, pl
 
 };
 
-export default PongChild; 
+export default Pong; 
