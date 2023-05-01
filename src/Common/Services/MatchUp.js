@@ -52,8 +52,19 @@ export const setUpSubscription = (matchup) => {
     });
     client.open();
 
-    let subscription = client.subscribe(matchup);
+    var query = new Parse.Query('Matchup');
+    query.equalTo('objectId', matchup.id);
+
+    console.log(query);
+
+    let subscription = client.subscribe(query);
+
     console.log(subscription);
+
+    subscription.on('update', (object) => {
+        console.log("Updated in Service!");
+    });
+
     return subscription;
 }
 

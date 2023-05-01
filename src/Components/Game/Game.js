@@ -57,21 +57,16 @@ const Game = ({currentUserReady, user}) => {
     useEffect(() => {
         if (subscription)
         {
-            if(isPlayerOne)
-            {
-                subscription.on('update', (object) => {
-                    var yPlayerOne = object.get('playerOnePos');
-                    setYPlayerOne(yPlayerOne);
-                });
-            }
-            else
-            {
-                subscription.on('update', (object) => {
-                    var yPlayerTwo = object.get('playerTwoPos');
-                    setYPlayerTwo(yPlayerTwo);
-                });
-            }
+            console.log('Assigning subscriptions');
+            console.log(subscription);
+
             subscription.on('update', (object) => {
+                var yPlayerOne = object.get('playerOnePos');
+                setYPlayerOne(yPlayerOne);
+
+                var yPlayerTwo = object.get('playerTwoPos');
+                setYPlayerTwo(yPlayerTwo);
+
                 var playerTwo = object.get('playerTwo');
                 console.log('Updated!');
                 if (playerTwo)
@@ -81,7 +76,7 @@ const Game = ({currentUserReady, user}) => {
                 }
             });
         }
-    }, [subscription, isPlayerOne]);
+    }, [subscription]);
 
     useEffect(()=>{
         if (matchUp)
