@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Pong from "../Pong/Pong.js";
-import { getMatchUp, findAvailableMatchUp, setUpSubscription, setPlayerOnePos, setPlayerTwoPos, setWinner, setActive } from "../../Common/Services/MatchUp.js";
+import { testSub, findAvailableMatchUp, setUpSubscription, setPlayerOnePos, setPlayerTwoPos, setWinner, setActive } from "../../Common/Services/MatchUp.js";
+import Parse from "parse";
 
 /* This module is a wrapper for whatever game is put in */
 const Game = ({currentUserReady, user}) => {
@@ -15,7 +16,32 @@ const Game = ({currentUserReady, user}) => {
     const [ yPlayerTwo, setYPlayerTwo ] = useState(0);
     const [ isWinner, setIsWinner ] = useState(false);
     const [ gameOver, setGameOver ] = useState(false);
+    const [ subscriptions, setSubscriptions ] = useState(null);
 
+    useEffect(() => {
+        if(matchUp){
+            var testsub = testSub(matchUp);
+            testsub.on('update', (object) => {
+                console.log("inside my sub");
+                var yPlayerOne = object.get('playerOnePos');
+                setYPlayerOne(yPlayerOne);
+
+                var yPlayerTwo = object.get('playerTwoPos');
+                setYPlayerTwo(yPlayerTwo);
+
+                var playerTwo = object.get('playerTwo');
+                if (playerTwo)
+                {
+                    setReadyToStart(true);
+                }
+              });
+            setSubscriptions(testsub);
+            console.log("the id: ", matchUp.id);
+            console.log(testsub);
+        }
+    }, [matchUp]);
+    
+    
     useEffect(()=>{
         if(currentUserReady && user)
         {
@@ -55,28 +81,28 @@ const Game = ({currentUserReady, user}) => {
     }, [matchUp]);
 
     useEffect(() => {
-        if (subscription)
+        if(subscription && isPlayerOne)
         {
-            console.log('Assigning subscriptions');
-            console.log(subscription);
-
             subscription.on('update', (object) => {
                 var yPlayerOne = object.get('playerOnePos');
                 setYPlayerOne(yPlayerOne);
-
+            });
+        }
+        else if(subscription)
+        {
+            subscription.on('update', (object) => {
                 var yPlayerTwo = object.get('playerTwoPos');
                 setYPlayerTwo(yPlayerTwo);
-
+            });
+            subscription.on('update', (object) => {
                 var playerTwo = object.get('playerTwo');
-                console.log('Updated!');
                 if (playerTwo)
                 {
-                    console.log('Ready To Start!');
                     setReadyToStart(true);
                 }
             });
         }
-    }, [subscription]);
+    }, [subscription, isPlayerOne]);
 
     useEffect(()=>{
         if (matchUp)
@@ -102,11 +128,6 @@ const Game = ({currentUserReady, user}) => {
 
     return (
         <div>
-            {gameOver && (
-                <div>
-                    <p>Game is done!</p>
-                </div>
-            )}
             <canvas id="gl-canvas" width="1024" height="512"></canvas>
             <div>
                 <h1 id="score"></h1>

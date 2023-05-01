@@ -55,7 +55,7 @@ export const setUpSubscription = (matchup) => {
     var query = new Parse.Query('Matchup');
     query.equalTo('objectId', matchup.id);
 
-    console.log(query);
+    console.log("in set up:", query);
 
     let subscription = client.subscribe(query);
 
@@ -86,4 +86,23 @@ export const setWinner = (matchup, user) => {
 export const setActive = (matchup, val) => {
     matchup.set('activeGame', val);
     matchup.save();
+}
+
+export const testSub = (matchUpArg) => {
+    var client = new Parse.LiveQueryClient({
+        applicationId: '2FgDITUa7Ud9aTfc2n9m3mKUNMMXp9juemjAp0Cq',
+        serverURL: 'wss://feature6.b4a.io', 
+        javascriptKey: 'OEZ1ViibPs3KVyj6TtqbDw7CvYfwF1Bjkiw3aAU9'
+      });
+      client.open();
+      
+        var query = new Parse.Query('MatchUp');
+        query.equalTo("objectId", matchUpArg.id);
+        console.log("in the funciton: ", matchUpArg.id);
+        console.log(matchUpArg);
+        var newSubscriptions = client.subscribe(query);
+      
+        console.log(query);
+
+        return newSubscriptions;
 }
