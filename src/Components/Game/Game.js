@@ -10,12 +10,10 @@ const Game = ({currentUserReady, user}) => {
     const [ readyToStart, setReadyToStart ] = useState(false);
     const [ matchUp, setMatchUp ] = useState(null);
     const [ isPlayerOne, setIsPlayerOne ] = useState(false);
-    const [ subscription, setSubscription ] = useState(null);
     const [ yPlayerOne, setYPlayerOne ] = useState(0);
     const [ yPlayerTwo, setYPlayerTwo ] = useState(0);
     const [ isWinner, setIsWinner ] = useState(false);
     const [ gameOver, setGameOver ] = useState(false);
-    const [ subscriptions, setSubscriptions ] = useState(null);
     const [ velXState, setVelXState ] = useState(0.02);
     const [ velYState, setVelYState ] = useState(0);
     const [ ballXState, setBallXState ] = useState(0);
@@ -28,19 +26,37 @@ const Game = ({currentUserReady, user}) => {
             var testsub = testSub(matchUp);
             testsub.on('update', (object) => {
                 console.log("inside my sub");
-                var yPlayerOne = object.get('playerOnePos');
-                setYPlayerOne(yPlayerOne);
+                var yPlayerOneArg = object.get('playerOnePos');
+                setYPlayerOne(yPlayerOneArg);
 
-                var yPlayerTwo = object.get('playerTwoPos');
-                setYPlayerTwo(yPlayerTwo);
+                var yPlayerTwoArg = object.get('playerTwoPos');
+                setYPlayerTwo(yPlayerTwoArg);
 
                 var playerTwo = object.get('playerTwo');
                 if (playerTwo)
                 {
                     setReadyToStart(true);
                 }
+
+                var velX = object.get('velX');
+                setVelXState(velX);
+
+                var velY = object.get('velY');
+                setVelYState(velY);
+
+                var ballX = object.get('ballX');
+                setBallXState(ballX);
+
+                var ballY = object.get('ballY');
+                setBallYState(ballY);
+
+                var playerOneScore = object.get('playerOneScore');
+                setPlayerOneScoreState(playerOneScore);
+
+                var playerTwoScore = object.get('playerTwoScore');
+                setPlayerTwoScoreState(playerTwoScore);
+
               });
-            setSubscriptions(testsub);
             console.log("the id: ", matchUp.id);
             console.log(testsub);
         }
@@ -76,38 +92,6 @@ const Game = ({currentUserReady, user}) => {
             console.log('Both players ready!');
         }
     }, [currentPlayerLoaded, otherPlayerLoaded]);
-
-    useEffect(() => {
-        if (matchUp)
-        {
-            let newSubscription = setUpSubscription(matchUp);
-            setSubscription(newSubscription);
-        }
-    }, [matchUp]);
-
-    useEffect(() => {
-        if(subscription && isPlayerOne)
-        {
-            subscription.on('update', (object) => {
-                var yPlayerOne = object.get('playerOnePos');
-                setYPlayerOne(yPlayerOne);
-            });
-        }
-        else if(subscription)
-        {
-            subscription.on('update', (object) => {
-                var yPlayerTwo = object.get('playerTwoPos');
-                setYPlayerTwo(yPlayerTwo);
-            });
-            subscription.on('update', (object) => {
-                var playerTwo = object.get('playerTwo');
-                if (playerTwo)
-                {
-                    setReadyToStart(true);
-                }
-            });
-        }
-    }, [subscription, isPlayerOne]);
 
     useEffect(()=>{
         if (matchUp)
