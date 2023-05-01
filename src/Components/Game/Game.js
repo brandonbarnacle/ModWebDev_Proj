@@ -55,23 +55,28 @@ const Game = ({currentUserReady, user}) => {
     }, [matchUp]);
 
     useEffect(() => {
-        if(subscription && isPlayerOne)
+        if (subscription)
         {
-            subscription.on('update', (object) => {
-                var yPlayerOne = object.get('playerOnePos');
-                setYPlayerOne(yPlayerOne);
-            });
-        }
-        else if(subscription)
-        {
-            subscription.on('update', (object) => {
-                var yPlayerTwo = object.get('playerTwoPos');
-                setYPlayerTwo(yPlayerTwo);
-            });
+            if(isPlayerOne)
+            {
+                subscription.on('update', (object) => {
+                    var yPlayerOne = object.get('playerOnePos');
+                    setYPlayerOne(yPlayerOne);
+                });
+            }
+            else
+            {
+                subscription.on('update', (object) => {
+                    var yPlayerTwo = object.get('playerTwoPos');
+                    setYPlayerTwo(yPlayerTwo);
+                });
+            }
             subscription.on('update', (object) => {
                 var playerTwo = object.get('playerTwo');
+                console.log('Updated!');
                 if (playerTwo)
                 {
+                    console.log('Ready To Start!');
                     setReadyToStart(true);
                 }
             });
@@ -102,6 +107,11 @@ const Game = ({currentUserReady, user}) => {
 
     return (
         <div>
+            {gameOver && (
+                <div>
+                    <p>Game is done!</p>
+                </div>
+            )}
             <canvas id="gl-canvas" width="1024" height="512"></canvas>
             <div>
                 <h1 id="score"></h1>

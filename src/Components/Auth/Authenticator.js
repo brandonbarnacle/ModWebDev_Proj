@@ -8,7 +8,7 @@ import '../../css/authenticator.css';
 import '../../css/common.css';
 //import loading from '../../Images/loading.gif';
 
-const Authenticator = ({setCurrentUserReady, setGlobalUser}) => {
+const Authenticator = ({setCurrentUserReady, setGlobalUser, reset}) => {
 
     // Variable to store the user data
     const [ currentUser, setCurrentUser ] = useState(null);
@@ -18,10 +18,9 @@ const Authenticator = ({setCurrentUserReady, setGlobalUser}) => {
     // 1 = register
     // 2 = verification
     // 3 = nothing (already logged in and verified)
-    const [ displayType, setDisplayType ] = useState(null);
+    const [ displayType, setDisplayType ] = useState(0);
 
     const [ readyUp, setReadyUp ] = useState(false);
-    const [ opponentReady, setOpponentReady ] = useState(false);
 
     // Check if the user is authenticated on page load
     useEffect(() => {
@@ -36,13 +35,16 @@ const Authenticator = ({setCurrentUserReady, setGlobalUser}) => {
     }, []);
 
     useEffect(() => {
-        console.log('Display Type is now globally set to: ' + displayType);
-    }, [displayType]);
+        if (reset)
+        {
+            setReadyUp(false);
+            setDisplayType(2);
+        }
+    }, [reset]);
 
     useEffect(() => {
         if (currentUser)
         {
-            console.log('Setting global user!');
             setGlobalUser(currentUser);
         }
     }, [currentUser, setGlobalUser]);
@@ -109,23 +111,11 @@ const Authenticator = ({setCurrentUserReady, setGlobalUser}) => {
             </div>
         )
     }
-    // else if(displayType === 3)
-    // {
-    //     return(
-    //         <div>
-    //             <div class="authenticator-wrapper">
-    //                 <div class="ready-form">
-    //                     <img src={loading} height="30px" width="30px"/>
-    //                     <h3>Waiting for Opponent...</h3>
-    //                 </div>
-    //                 <div class="screenblur"></div>
-    //             </div>
-    //         </div>
-    //     )
-    // }
-    else if(readyUp/* && opponentReady*/)
+    else if(readyUp)
     {
-        console.log('Game time started');
+        return(
+            <div></div>
+        );
     }
     else
     {

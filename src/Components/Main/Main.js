@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import MainList from "./MainList";
 import Authenticator from "../Auth/Authenticator";
 import Game from "../Game/Game";
 import Leaderboard from "../Leaderboard/Leaderboard";
@@ -8,21 +7,16 @@ const MainModule = () => {
 
     const [ currentUserReady, setCurrentUserReady ] = useState(false);
     const [ currentUser, setCurrentUser ] = useState('');
+    const [ reset, setReset ] = useState(false);
 
-    useEffect(()=>{
-        if (currentUserReady)
+    useEffect(() => {
+        if(reset)
         {
-            console.log('The current user is ready!');
+            setCurrentUserReady(false);
+            setCurrentUser(null);
+            setReset(false);
         }
-        else
-        {
-            console.log('The current user is not ready!');
-        }
-    }, [currentUserReady])
-
-    useEffect(()=>{
-        console.log('The current user in Main is: ' + currentUser);
-    },[currentUser]);
+    }, [reset]);
 
     return (
         <div>
@@ -35,7 +29,6 @@ const MainModule = () => {
             user={currentUser}
         />
         <Leaderboard />
-        <MainList />
         </div>
     );
 };
