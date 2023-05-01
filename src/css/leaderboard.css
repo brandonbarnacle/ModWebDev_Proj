@@ -8,8 +8,28 @@
     color: var(--text-background);
     text-align: center;
     list-style-position: inside;
+    padding: 0;
+}
+
+.winners li {
+    padding: 10px;
+    display: flex;
+}
+
+.winners .wins {
+    margin-left: auto;
+}
+
+.winners p {
+    font-family: 'Noto Sans Display', sans-serif;
+    font-size: 19px;
+}
+
+.winners li:nth-child(odd) {
+    background: var(--foreground);
 }
 
 .leaderboard {
     background: var(--background);
+    width: 100%;
 }

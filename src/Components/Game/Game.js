@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Pong from "../Pong/Pong.js";
 import { testSub, findAvailableMatchUp, setUpSubscription, setPlayerOnePos, setPlayerTwoPos, setWinner, setActive } from "../../Common/Services/MatchUp.js";
-import Parse from "parse";
 
 /* This module is a wrapper for whatever game is put in */
 const Game = ({currentUserReady, user}) => {
@@ -175,7 +174,7 @@ const Game = ({currentUserReady, user}) => {
     }, [isWinner, matchUp, user]);
 
     return (
-        <div>
+        <div class="game">
             <canvas id="gl-canvas" width="1024" height="512"></canvas>
             <div>
                 <h1 id="score"></h1>
