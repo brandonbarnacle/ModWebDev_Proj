@@ -17,6 +17,12 @@ const Game = ({currentUserReady, user}) => {
     const [ isWinner, setIsWinner ] = useState(false);
     const [ gameOver, setGameOver ] = useState(false);
     const [ subscriptions, setSubscriptions ] = useState(null);
+    const [ velXState, setVelXState ] = useState(0.02);
+    const [ velYState, setVelYState ] = useState(0);
+    const [ ballXState, setBallXState ] = useState(0);
+    const [ ballYState, setBallYState ] = useState(0);
+    const [ playerOneScoreState, setPlayerOneScoreState ] = useState(0);
+    const [ playerTwoScoreState, setPlayerTwoScoreState ] = useState(0);
 
     useEffect(() => {
         if(matchUp){
@@ -119,6 +125,48 @@ const Game = ({currentUserReady, user}) => {
     }, [yPlayerTwo, matchUp]);
 
     useEffect(()=>{
+        if (matchUp)
+        {
+            setVelXState(matchUp, velXState);
+        }
+    }, [velXState, matchUp]);
+
+    useEffect(()=>{
+        if (matchUp)
+        {
+            setVelYState(matchUp, velYState);
+        }
+    }, [velYState, matchUp]);
+
+    useEffect(()=>{
+        if (matchUp)
+        {
+            setBallXState(matchUp, ballXState);
+        }
+    }, [ballXState, matchUp]);
+
+    useEffect(()=>{
+        if (matchUp)
+        {
+            setBallYState(matchUp, ballYState);
+        }
+    }, [ballYState, matchUp]);
+
+    useEffect(()=>{
+        if (matchUp)
+        {
+            setPlayerOneScoreState(matchUp, playerOneScoreState);
+        }
+    }, [playerOneScoreState, matchUp]);
+
+    useEffect(()=>{
+        if (matchUp)
+        {
+            setPlayerTwoScoreState(matchUp, playerTwoScoreState);
+        }
+    }, [playerTwoScoreState, matchUp]);
+
+    useEffect(()=>{
         if (matchUp && isWinner)
         {
             setActive(matchUp, false);
@@ -141,6 +189,12 @@ const Game = ({currentUserReady, user}) => {
                 setIsWinner={setIsWinner}
                 setGameOver={setGameOver}
                 isPlayerOne={isPlayerOne}
+                velX={velXState}
+                velY={velYState}
+                ballX={ballXState}
+                ballY={ballYState}
+                playerOneScore={playerOneScoreState}
+                playerTwoScore={playerTwoScoreState}
             />
         </div>
     );

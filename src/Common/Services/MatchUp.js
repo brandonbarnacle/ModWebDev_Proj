@@ -88,6 +88,36 @@ export const setActive = (matchup, val) => {
     matchup.save();
 }
 
+export const setBallX = (matchup, val) => {
+    matchup.set('ballX', val);
+    matchup.save();
+}
+
+export const setBallY = (matchup, val) => {
+    matchup.set('ballY', val);
+    matchup.save();
+}
+
+export const setVelX = (matchup, val) => {
+    matchup.set('velX', val);
+    matchup.save();
+}
+
+export const setVelY = (matchup, val) => {
+    matchup.set('velY', val);
+    matchup.save();
+}
+
+export const setPlayerOneScore = (matchup, val) => {
+    matchup.set('playerOneScore', val);
+    matchup.save();
+}
+
+export const setPlayerTwoScore = (matchup, val) => {
+    matchup.set('playerTwoScore', val);
+    matchup.save();
+}
+
 export const testSub = (matchUpArg) => {
     var client = new Parse.LiveQueryClient({
         applicationId: '2FgDITUa7Ud9aTfc2n9m3mKUNMMXp9juemjAp0Cq',
