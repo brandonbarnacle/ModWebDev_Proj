@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import MainList from "./MainList";
 import Authenticator from "../Auth/Authenticator";
 import Game from "../Game/Game";
+import Leaderboard from "../Leaderboard/Leaderboard";
 
 const MainModule = () => {
 
@@ -33,6 +34,7 @@ const MainModule = () => {
             currentUserReady={currentUserReady}
             user={currentUser}
         />
+        <Leaderboard />
         <MainList />
         </div>
     );
