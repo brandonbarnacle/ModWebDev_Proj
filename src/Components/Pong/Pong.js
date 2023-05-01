@@ -20,10 +20,6 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
     var extentBall = 0.1;
     var paddleMove = 0.1; 
     var playerOne;
-    var client;
-    var matchQuery;
-    var subscription;
-    var theGame;
     var tickRate = 10; 
     var nextTick;
     var currentTime;
@@ -76,9 +72,6 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
         playerOneScore = 0;
         playerTwoScore = 0;
         document.getElementById("score").innerHTML = "Player One: " + playerOneScore + " | Player Two: " + playerTwoScore;
-
-        // set up live query
-        //setUpLiveQuery();
 
         // get center of ball, set up radius
         xCenterBall = 0.0;
@@ -324,46 +317,6 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
         }
         else {
             yVelocityBall = 0;
-        }
-    }
-
-    async function setUpLiveQuery(){
-        client = new Parse.LiveQueryClient({
-            applicationId: '2FgDITUa7Ud9aTfc2n9m3mKUNMMXp9juemjAp0Cq',
-            serverURL: 'wss://feature6.b4a.io', 
-            javascriptKey: 'OEZ1ViibPs3KVyj6TtqbDw7CvYfwF1Bjkiw3aAU9'
-        });
-        client.open();
-
-        // set up query for the match
-        matchQuery = new Parse.Query('MatchUp');
-        matchQuery.equalTo('objectId', 'pS9b4vI0XQ');
-        // set up subscription for updates
-        subscription = client.subscribe(matchQuery);
-
-        // find if player one or two
-        var currentUser = Parse.User.current();
-        theGame = await matchQuery.first();
-
-        if (currentUser.getUsername() === theGame.get('playerOne')['id']){
-            playerOne = 0;
-        }
-        else {
-            playerOne = 1;
-        }
-
-        // set up subscriptions
-        if (playerOne === 1) {
-            subscription.on('update', (object) => {
-                var temp = object.get('playerOnePos');
-                yPlayerOne = temp;
-        });
-        }
-        else if (playerOne === 0) {
-            subscription.on('update', (object) => {
-                var temp = object.get('playerTwoPos');
-                yPlayerTwo = temp;
-            });
         }
     }
 
