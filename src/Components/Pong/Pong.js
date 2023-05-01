@@ -5,8 +5,7 @@ import vert from "../../Common/WebGL/Shaders/Pong/pong-vert.js";
 import frag from "../../Common/WebGL/Shaders/Pong/pong-frag.js";
 import Parse from "parse";
 
-const Pong = ({matchId, yPlayerOneArg, yPlayerTwoArg, playerOneScoreArg, playerTwoScoreArg, startGame, 
-                    updateYPlayerOne, updateYPlayerTwo, updatePlayerOneScore, updatePlayerTwoScore}) => {
+const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, updateYPlayerTwo, setIsWinner, setGameOver}) => {
     // Variables for WedGL script
     var gl;
     var vertices = [];

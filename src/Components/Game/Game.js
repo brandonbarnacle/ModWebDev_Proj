@@ -113,6 +113,7 @@ const Game = ({currentUserReady, user}) => {
                 updateYPlayerOne={setYPlayerOne}
                 updateYPlayerTwo={setYPlayerTwo}
                 setIsWinner={setIsWinner}
+                setGameOver={setGameOver}
             />
         </div>
     );
