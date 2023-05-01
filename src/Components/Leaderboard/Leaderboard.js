@@ -1,5 +1,5 @@
 import Parse from "parse";
-import React, {useEffect, userEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import LeaderboardChild from "./LeaderboardChild";
 
 const Leaderboard = () => {
@@ -36,7 +36,9 @@ const Leaderboard = () => {
         }); 
     }, []);
 
-    return <LeaderboardChild leaderboard={winners} place={place} user={user}/>;
+    return (
+        <LeaderboardChild leaderboard={winners} place={place} user={user}/>
+    );
 
     
 }

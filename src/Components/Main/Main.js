@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Authenticator from "../Auth/Authenticator";
 import Game from "../Game/Game";
 import Leaderboard from "../Leaderboard/Leaderboard";
+import '../../css/main.css';
 
 const MainModule = () => {
 
@@ -20,15 +21,17 @@ const MainModule = () => {
 
     return (
         <div>
-        <Authenticator 
-            setCurrentUserReady={setCurrentUserReady}
-            setGlobalUser={setCurrentUser}
-        />
-        <Game 
-            currentUserReady={currentUserReady}
-            user={currentUser}
-        />
-        <Leaderboard />
+            <Authenticator 
+                setCurrentUserReady={setCurrentUserReady}
+                setGlobalUser={setCurrentUser}
+            />
+            <div class="game-container">
+                <Game 
+                    currentUserReady={currentUserReady}
+                    user={currentUser}
+                />
+                <Leaderboard />
+            </div>
         </div>
     );
 };

@@ -13,7 +13,10 @@ const LeaderboardChild = ({leaderboard, place, user}) => {
                 {leaderboard.length > 0 && (
                     <ol class="winners">
                       {leaderboard.map((leader) => (
-                        <li key={leader.id}>{leader.attributes['username']} {leader.attributes['wins']}</li>
+                        <li key={leader.id}>
+                            <p class="username">{leader.attributes['username']}</p>
+                            <p class="wins">{leader.attributes['wins']}</p>
+                        </li>
                     ))}
                     </ol>
                 )}
