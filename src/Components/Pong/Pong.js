@@ -78,8 +78,8 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
     function setup() {
         // set up score
-        playerOneScore = yPlayerOneArg;
-        playerTwoScore = yPlayerTwoArg;
+        playerOneScore = 0;
+        playerTwoScore = 0;
         document.getElementById("score").innerHTML = "Player One: " + playerOneScore + " | Player Two: " + playerTwoScore;
 
         // get center of ball, set up radius
@@ -110,7 +110,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
         // set up player one center
         xPlayerOne = -2.0;
-        yPlayerOne = 0.0;
+        yPlayerOne = yPlayerOneArg;
 
         // set up the player one paddle
         vertices.push(vec2(0.0,-0.4));
@@ -120,7 +120,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
         // set up player one center
         xPlayerTwo = 2.0;
-        yPlayerTwo = 0.0;
+        yPlayerTwo = yPlayerTwoArg;
 
         // get current time
         currentTime = new Date();
@@ -263,7 +263,6 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
         // set next tick
         nextTick = currentTime.getTime() + tickRate;
 
-        
     }
   
     function checkKey(e){
