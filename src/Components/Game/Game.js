@@ -192,13 +192,23 @@ const Game = ({currentUserReady, user}) => {
     //     }
     // }, [playerTwoScoreState, matchUp]);
 
+    ///////////////////////////
+    // useEffect(()=>{
+    //     if (matchUp && isWinner)
+    //     {
+    //         setActive(matchUp, false);
+    //         setWinner(matchUp, user);
+    //     }
+    // }, [isWinner, matchUp, user]);
+    ////////////////////////////
+
     useEffect(()=>{
-        if (matchUp && isWinner)
+        if (matchUp && gameOver)
         {
             setActive(matchUp, false);
-            setWinner(matchUp, user);
+            setWinner(matchUp, isWinner);
         }
-    }, [isWinner, matchUp, user]);
+    }, [isWinner, matchUp, gameOver]);
 
     return (
         <div class="game">

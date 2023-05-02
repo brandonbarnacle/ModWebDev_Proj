@@ -53,9 +53,41 @@ export const setPlayerTwoPos = (matchup, score) => {
     matchup.save();
 }
 
-export const setWinner = (matchup, user) => {
-    matchup.set('winner', user);
-    matchup.save();
+export const setWinner = (matchup, winner) => {
+    if(winner) {
+        const theWinner = matchup.get('playerTwo')
+        matchup.set('winner', theWinner);
+        matchup.save();
+
+        var test = theWinner.id;
+        const query = new Parse.Query("User");
+        query.equalTo('objectId', test);
+        query.find().then((results) => {
+            var wins = results[0].get('wins');
+            wins += 1;
+            results[0].set('wins', wins);
+            results[0].save();
+
+        });
+
+    }
+    else {
+        const theWinner = matchup.get('playerOne')
+        matchup.set('winner', theWinner);
+        matchup.save();
+
+        var test = theWinner.id;
+        const query = new Parse.Query("User");
+        query.equalTo('objectId', test);
+        query.find().then((results) => {
+            var wins = results[0].get('wins');
+            wins += 1;
+            results[0].set('wins', wins);
+            results[0].save();
+        });
+    }
+    //matchup.set('winner', user);
+    //matchup.save();
 }
 
 export const setActive = (matchup, val) => {

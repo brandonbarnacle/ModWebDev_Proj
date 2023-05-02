@@ -38,6 +38,8 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
     const timeInterval = 100;
 
+    console.log("am i player one?: ", isPlayerOne);
+
     useEffect(() => {
         const interval = setInterval(() => {
             time.current = new Date().getTime();
@@ -102,7 +104,13 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
     function setup() {
         // set up scoreboard
-        document.getElementById("score").innerHTML = "Player One: " + oneScore.current + " | Player Two: " + twoScore.current;
+        if (isPlayerOne){
+            document.getElementById("score").innerHTML = "You are player one!";
+        }
+        else {
+            document.getElementById("score").innerHTML = "You are player two!";
+        }
+       // document.getElementById("score").innerHTML = "Player One: " + oneScore.current + " | Player Two: " + twoScore.current;
 
         // get center of ball, set up radius
         var p = vec2(0.0);
@@ -234,40 +242,57 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
             // check if score
             if(newBallX.current+extentBall >= 2.0) {
                 newVelY.current = 0.0;
-                newVelX.current = 0.1;
-                console.log(oneScore.current);
-                oneScore.current += 1;
+                newVelX.current = 0.0;
+                //console.log(oneScore.current);
+                //oneScore.current += 1;
                 //setPlayerOneScore(oneScore.current + 1);
+                document.getElementById("score").innerHTML = "Player One Won!";
                 gameOn = false;
-                resetGame();
+                setIsWinner(false);
+                setGameOver(true);
+                // if(isPlayerOne){
+                //     console.log("Am i player one? ", isPlayerOne);
+                //     console.log("setting winner");
+                //     setIsWinner(true);
+                //     setGameOver(true);
+                // }
+                //resetGame();
 
             } 
             if(newBallX.current-extentBall <= -2.0) {
                 newVelY.current = 0.0;
-                newVelX.current = -0.1;
-                console.log(twoScore.current);
-                twoScore.current += 1;
+                newVelX.current = 0.0;
+                //console.log(twoScore.current);
+                //twoScore.current += 1;
                 //setPlayerTwoScore(twoScore.current + 1);
+                document.getElementById("score").innerHTML = "Player Two Won!";
                 gameOn = false;
-                resetGame();
+                setIsWinner(true);
+                setGameOver(true);
+                // if(!isPlayerOne){
+                //     console.log("Am i player one? ", isPlayerOne);
+                //     setIsWinner(true);
+                //     setGameOver(true);
+                // }
+                //resetGame();
 
             }
 
             // check if game won
-            if(oneScore.current >= 3) {
-                gameOn = false;
-                if(playerOne === 0){
-                    setIsWinner(true);
-                }
-                setGameOver(true);
-            }
-            if (twoScore.current >= 3){
-                gameOn = false;
-                if(playerOne === 1){
-                    setIsWinner(true);
-                }
-                setGameOver(true);
-            }
+            // if(oneScore.current >= 3) {
+            //     gameOn = false;
+            //     if(playerOne === 0){
+            //         setIsWinner(true);
+            //     }
+            //     setGameOver(true);
+            // }
+            // if (twoScore.current >= 3){
+            //     gameOn = false;
+            //     if(playerOne === 1){
+            //         setIsWinner(true);
+            //     }
+            //     setGameOver(true);
+            // }
     }
   
     function checkKey(e){
