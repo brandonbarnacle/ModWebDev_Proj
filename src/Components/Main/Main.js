@@ -21,6 +21,7 @@ const MainModule = () => {
 
     return (
         <div>
+            <div class="header"><h1>Brandon's Fun Times</h1></div>
             <Authenticator 
                 setCurrentUserReady={setCurrentUserReady}
                 setGlobalUser={setCurrentUser}

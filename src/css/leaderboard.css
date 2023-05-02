@@ -2,6 +2,13 @@
     color: var(--text-background);
     text-align: center;
     font-family: 'Noto Sans Display', sans-serif;
+    height: 78px;
+    margin: 0;
+}
+
+.leaderboard-header h1, h4 {
+    margin: 0;
+    font-weight: 100;
 }
 
 .winners {
@@ -9,6 +16,8 @@
     text-align: center;
     list-style-position: inside;
     padding: 0;
+    height: 504px;
+    margin: 0;
 }
 
 .winners li {
@@ -26,10 +35,19 @@
 }
 
 .winners li:nth-child(odd) {
-    background: var(--foreground);
+    background: var(--accent);
 }
 
 .leaderboard {
-    background: var(--background);
+    background: var(--foreground);
     width: 100%;
+}
+
+.username-wins-label {
+    display: flex;
+    margin: 0 10px;
+}
+
+.username-label {
+    margin-right: auto;
 }

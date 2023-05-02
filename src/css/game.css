@@ -1,0 +1,22 @@
+.scorebar {
+    margin: 0;
+    height: 70px;
+    background: var(--background);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scorebar h1 {
+    margin: 0;
+}
+
+#gl-canvas {
+    margin-bottom: -4px;
+}
+
+#score{
+    font-family: 'Noto Sans Display', sans-serif;
+    font-weight: 100;
+}

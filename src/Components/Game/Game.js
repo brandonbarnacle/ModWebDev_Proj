@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Pong from "../Pong/Pong.js";
 import { testSub, findAvailableMatchUp, setUpSubscription, setPlayerOnePos, setPlayerTwoPos, setWinner, setActive, setBallX, setBallY, setPlayerOneScore, setPlayerTwoScore, setVelX, setVelY } from "../../Common/Services/MatchUp.js";
+import '../../css/game.css';
 
 /* This module is a wrapper for whatever game is put in */
 const Game = ({currentUserReady, user}) => {
@@ -21,52 +22,82 @@ const Game = ({currentUserReady, user}) => {
     const [ playerOneScoreState, setPlayerOneScoreState ] = useState(0);
     const [ playerTwoScoreState, setPlayerTwoScoreState ] = useState(0);
 
+    const doUpdate = useRef(true);
+    const lastUpdate = useRef(0);
+    const time = useRef();
+
+    const timeInterval = 100;
+
+    const startTheGame = useRef(false);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            time.current = new Date().getTime();
+            if (time.current > lastUpdate.current + timeInterval)
+            {
+                doUpdate.current = true;
+                lastUpdate.current = time.current;
+                console.log('Time to update!');
+            }
+        }, 50);
+        return () => clearInterval(interval);
+    }, []);
+
     useEffect(() => {
         if(matchUp){
             var testsub = testSub(matchUp);
             testsub.on('update', (object) => {
-                console.log("inside my sub");
-                var yPlayerOneArg = object.get('playerOnePos');
-                setYPlayerOne(yPlayerOneArg);
-
-                var yPlayerTwoArg = object.get('playerTwoPos');
-                setYPlayerTwo(yPlayerTwoArg);
-
-                var playerTwo = object.get('playerTwo');
-                if (playerTwo)
+                if (doUpdate.current)
                 {
-                    setReadyToStart(true);
+                    doUpdate.current = false;
+                    console.log("updating!");
+                    var yPlayerOneArg = object.get('playerOnePos');
+                    setYPlayerOne(yPlayerOneArg);
+
+                    console.log('yPlayerOne: ', yPlayerOne);
+
+                    var yPlayerTwoArg = object.get('playerTwoPos');
+                    setYPlayerTwo(yPlayerTwoArg);
+
+                    console.log('yPlayerTwo: ', yPlayerTwo);
+
+                    var playerTwo = object.get('playerTwo');
+                    if (playerTwo)
+                    {
+                        setReadyToStart(true);
+                        startTheGame.current = true;
+                    }
+
+                    var velX = object.get('velX');
+                    setVelXState(velX);
+
+                    console.log('velX: ', velX);
+
+                    var velY = object.get('velY');
+                    setVelYState(velY);
+
+                    console.log('velY: ', velY);
+
+                    var ballX = object.get('ballX');
+                    setBallXState(ballX);
+
+                    console.log('ballX: ', ballX);
+
+                    var ballY = object.get('ballY');
+                    setBallYState(ballY);
+
+                    console.log('ballY: ', ballY);
+
+                    var playerOneScore = object.get('playerOneScore');
+                    setPlayerOneScoreState(playerOneScore);
+
+                    console.log('playerOneScore: ', playerOneScore);
+
+                    var playerTwoScore = object.get('playerTwoScore');
+                    setPlayerTwoScoreState(playerTwoScore);
+
+                    console.log('playerTwoScore: ', playerTwoScore);
                 }
-
-                var velX = object.get('velX');
-                setVelXState(velX);
-
-                console.log('velX: ', velX);
-
-                var velY = object.get('velY');
-                setVelYState(velY);
-
-                console.log('velY: ', velY);
-
-                var ballX = object.get('ballX');
-                setBallXState(ballX);
-
-                console.log('ballX: ', ballX);
-
-                var ballY = object.get('ballY');
-                setBallYState(ballY);
-
-                console.log('ballY: ', ballY);
-
-                var playerOneScore = object.get('playerOneScore');
-                setPlayerOneScoreState(playerOneScore);
-
-                console.log('playerOneScore: ', playerOneScore);
-
-                var playerTwoScore = object.get('playerTwoScore');
-                setPlayerTwoScoreState(playerTwoScore);
-
-                console.log('playerTwoScore: ', playerTwoScore);
 
               });
             console.log("the id: ", matchUp.id);
@@ -88,6 +119,7 @@ const Game = ({currentUserReady, user}) => {
                 else if (newMatchUp.attributes.playerTwo.id === user.id)
                 {
                     setIsPlayerOne(false);
+                    startTheGame.current = true;
                 }
             });
         }
@@ -171,13 +203,13 @@ const Game = ({currentUserReady, user}) => {
     return (
         <div class="game">
             <canvas id="gl-canvas" width="1024" height="512"></canvas>
-            <div>
+            <div class="scorebar">
                 <h1 id="score"></h1>
             </div>
             <Pong 
                 yPlayerOneArg={yPlayerOne}
                 yPlayerTwoArg={yPlayerTwo}
-                startGame={readyToStart}
+                startGame={startTheGame}
                 updateYPlayerOne={(newPlayerOnePos) => setPlayerOnePos(matchUp, newPlayerOnePos)}
                 updateYPlayerTwo={(newPlayerTwoPos) => setPlayerTwoPos(matchUp, newPlayerTwoPos)}
                 setIsWinner={setIsWinner}
@@ -195,6 +227,7 @@ const Game = ({currentUserReady, user}) => {
                 setBallY={(newBallY) => setBallY(matchUp, newBallY)}
                 setVelX={(newVelX) => setVelX(matchUp, newVelX)}
                 setVelY={(newVelY) => setVelY(matchUp, newVelY)}
+                tick={false}
             />
         </div>
     );

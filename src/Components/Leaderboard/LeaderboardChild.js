@@ -8,7 +8,10 @@ const LeaderboardChild = ({leaderboard, place, user}) => {
             <div class="leaderboard">
                 <div class="leaderboard-header"> 
                     <h1>Leaderboard</h1>
-                    <h4>Rank Name Wins</h4>
+                    <div class="username-wins-label">
+                        <h4 class="username-label">Username</h4>
+                        <h4 class="wins-label">Wins</h4>
+                    </div>
                 </div>
                 {leaderboard.length > 0 && (
                     <ol class="winners">
