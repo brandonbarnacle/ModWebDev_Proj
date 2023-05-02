@@ -11,20 +11,26 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
     var vertices = [];
     var u_ColorLoc;
     var u_vCenterLoc;
-    var xPlayerOne, yPlayerOne;
-    var xPlayerTwo, yPlayerTwo;
-    var playerOneScore, playerTwoScore;
     var u_projMatrixLoc;
     var extentBall = 0.1;
     var paddleMove = 0.1; 
     var playerOne;
+    var xPlayerOne;
+    var xPlayerTwo;
 
     var gameOn;
+
+    const oneScore = useRef(0);
+    const twoScore = useRef(0);
 
     const newBallX = useRef(0);
     const newBallY = useRef(0);
     const newVelX = useRef(0.1);
     const newVelY = useRef(0);
+
+    const paddleOneY = useRef(0);
+    const paddleTwoY = useRef(0);
+    const paddleHit = useRef(0);
 
     const doUpdate = useRef(true);
     const lastUpdate = useRef(0);
@@ -39,7 +45,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
             {
                 doUpdate.current = true;
                 lastUpdate.current = time.current;
-                console.log('Time to update the ball!');
+                // console.log('Time to update the ball!');
             }
         }, 50);
         return () => clearInterval(interval);
@@ -95,19 +101,13 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
     render();
 
     function setup() {
-        // set up score
-        playerOneScore = playerOneScoreArg;
-        playerTwoScore = playerTwoScoreArg;
-        document.getElementById("score").innerHTML = "Player One: " + playerOneScore + " | Player Two: " + playerTwoScore;
+        // set up scoreboard
+        document.getElementById("score").innerHTML = "Player One: " + oneScore.current + " | Player Two: " + twoScore.current;
 
         // get center of ball, set up radius
         var p = vec2(0.0);
         vertices.push(p);
         var radius = 0.1;
-
-        // set initial ball velocity, random side start
-        newVelY.current = newVelY.current;
-        newVelX.current = newVelX.current; 
 
         // set up rest of ball points
         var increment = Math.PI/36;
@@ -126,7 +126,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
         // set up player one center
         xPlayerOne = -2.0;
-        yPlayerOne = yPlayerOneArg;
+        paddleOneY.current = yPlayerOneArg;
 
         // set up the player one paddle
         vertices.push(vec2(0.0,-0.4));
@@ -136,7 +136,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
         // set up player one center
         xPlayerTwo = 2.0;
-        yPlayerTwo = yPlayerTwoArg;
+        paddleTwoY.current = yPlayerTwoArg;
     }
 
     function render() {
@@ -148,7 +148,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
             gameOn = false;
         } 
         
-        console.log("start the game: ", startGame);
+        // console.log("start the game: ", startGame);
 
         // clear buffer
         gl.clear(gl.COLOR_BUFFER_BIT);
@@ -161,13 +161,13 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
         // draw player one paddle
         gl.uniform4fv(u_ColorLoc, vec4(1.0, 0.4, 0.4, 1.0));
-        gl.uniform2fv (u_vCenterLoc, vec2(xPlayerOne, yPlayerOne));
+        gl.uniform2fv (u_vCenterLoc, vec2(xPlayerOne, paddleOneY.current));
         // the next 4 points are player one
         gl.drawArrays( gl.TRIANGLE_FAN, 74, 4 ); 
 
         // draw player two paddle
         gl.uniform4fv(u_ColorLoc, vec4(1.0, 0.4, 0.4, 1.0));
-        gl.uniform2fv (u_vCenterLoc, vec2(xPlayerTwo, yPlayerTwo));
+        gl.uniform2fv (u_vCenterLoc, vec2(xPlayerTwo, paddleTwoY.current));
         // the next 4 points are player one
         gl.drawArrays( gl.TRIANGLE_FAN, 78, 4 );
 
@@ -180,47 +180,44 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
     }
 
     function animate() {
-        // update all from data base;
-        yPlayerOne = yPlayerOneArg;
-        yPlayerTwo = yPlayerTwoArg;
-        playerOneScore = playerOneScoreArg;
-        playerTwoScore = playerTwoScoreArg;
-        document.getElementById("score").innerHTML = "Player One: " + playerOneScore + " | Player Two: " + playerTwoScore;
-
             // increment xCenter and yCenter
             newBallX.current = newBallX.current + newVelX.current;
             newBallY.current = newBallY.current + newVelY.current;
 
             // check if hit player one paddle
             if (newBallX.current-extentBall <= xPlayerOne+0.1){
-                if(newBallY.current-extentBall/2 <= yPlayerOne+0.4 && newBallY.current-extentBall/2 >= yPlayerOne-0.4){
+                if(newBallY.current-extentBall/2 <= paddleOneY.current+0.4 && newBallY.current-extentBall/2 >= paddleOneY.current-0.4){
                     // reverse x velocity
                     newBallX.current = -1.9 + extentBall;
                     newVelX.current = -newVelX.current;
                     // calculate y angle velocity
-                    calcYVelocity(yPlayerOne);
+                    paddleHit.current = 0;
+                    calcYVelocity();
                 }
-                else if(newBallY.current+extentBall/2 <= yPlayerOne+0.4 && newBallY.current+extentBall/2 >= yPlayerOne-0.4){
+                else if(newBallY.current+extentBall/2 <= paddleOneY.current+0.4 && newBallY.current+extentBall/2 >= paddleOneY.current-0.4){
                     newBallX.current = -1.9 + extentBall;
                     newVelX.current = -newVelX.current;
                     // calculate y angle velocity
-                    calcYVelocity(yPlayerOne);
+                    paddleHit.current = 0;
+                    calcYVelocity();
                 }
             }
 
             // check if hit player two padde
             else if (newBallX.current+extentBall >= xPlayerTwo-0.1){
-                if(newBallY.current-extentBall/2 <= yPlayerTwo+0.4 && newBallY.current-extentBall/2 >= yPlayerTwo-0.4) {
+                if(newBallY.current-extentBall/2 <= paddleTwoY.current+0.4 && newBallY.current-extentBall/2 >= paddleTwoY.current-0.4) {
                     newBallX.current = 1.9 - extentBall;
                     newVelX.current = -newVelX.current;
                     // calculate y angle velocity
-                    calcYVelocity(yPlayerTwo);
+                    paddleHit.current = 1;
+                    calcYVelocity();
                 }
-                else if(newBallY.current+extentBall/2 <= yPlayerTwo+0.4 && newBallY.current+extentBall/2 >= yPlayerTwo-0.4) {
+                else if(newBallY.current+extentBall/2 <= paddleTwoY.current+0.4 && newBallY.current+extentBall/2 >= paddleTwoY.current-0.4) {
                     newBallX.current = 1.9 - extentBall;
                     newVelX.current = -newVelX.current;
                     // calculate y angle velocity
-                    calcYVelocity(yPlayerTwo);
+                    paddleHit.current = 1;
+                    calcYVelocity();
                 }
             }
 
@@ -238,7 +235,9 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
             if(newBallX.current+extentBall >= 2.0) {
                 newVelY.current = 0.0;
                 newVelX.current = 0.1;
-                setPlayerOneScore(playerOneScore + 1);
+                console.log(oneScore.current);
+                oneScore.current += 1;
+                //setPlayerOneScore(oneScore.current + 1);
                 gameOn = false;
                 resetGame();
 
@@ -246,21 +245,23 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
             if(newBallX.current-extentBall <= -2.0) {
                 newVelY.current = 0.0;
                 newVelX.current = -0.1;
-                setPlayerTwoScore(playerTwoScore + 1);
+                console.log(twoScore.current);
+                twoScore.current += 1;
+                //setPlayerTwoScore(twoScore.current + 1);
                 gameOn = false;
                 resetGame();
 
             }
 
             // check if game won
-            if(playerOneScore >= 3) {
+            if(oneScore.current >= 3) {
                 gameOn = false;
                 if(playerOne === 0){
                     setIsWinner(true);
                 }
                 setGameOver(true);
             }
-            if (playerTwoScore >= 3){
+            if (twoScore.current >= 3){
                 gameOn = false;
                 if(playerOne === 1){
                     setIsWinner(true);
@@ -271,8 +272,8 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
   
     function checkKey(e){
         // set vars
-        var tempOne = yPlayerOne;
-        var tempTwo = yPlayerTwo;
+        var tempOne = paddleOneY.current;
+        var tempTwo = paddleTwoY.current;
 
         // setting up the event
         e = e || window.event;
@@ -286,6 +287,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
                         tempOne = 0.6;
                     }
                     updateYPlayerOne(tempOne);
+                    paddleOneY.current = tempOne;
                 }
                 else {
                     tempTwo += paddleMove;
@@ -293,6 +295,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
                         tempTwo = 0.6;
                     }
                     updateYPlayerTwo(tempTwo);
+                    paddleTwoY.current = tempTwo;
                 }
             }
             // checking if down arrow
@@ -303,6 +306,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
                         tempOne = -0.6;
                     }
                     updateYPlayerOne(tempOne);
+                    paddleOneY.current = tempOne; 
                 }
                 else {
                    tempTwo -= paddleMove;
@@ -310,6 +314,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
                         tempTwo = -0.6;
                     }
                     updateYPlayerTwo(tempTwo);
+                    paddleTwoY.current = tempTwo;
                 }
             }
         }
@@ -321,13 +326,27 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
         gameOn = true;
         newBallX.current = 0;
         newBallY.current = 0;
-        updateYPlayerOne(0);
-        updateYPlayerTwo(0);
+        if (playerOne === 0){
+            updateYPlayerOne(0);
+            paddleOneY.current = 0;
+        }
+        else {
+            updateYPlayerTwo(0);
+            paddleTwoY.current = 0;
+        } 
     }
 
-    function calcYVelocity(player){
+    function calcYVelocity(){
+        var player;
+        console.log("which paddle hit: ", paddleHit.current);
+        if (paddleHit.current === 0){
+            player = paddleOneY.current;
+        }
+        else {
+            player = paddleTwoY.current;
+        }
         console.log("the ball y: ", newBallY.current);
-        console.log("the ball x: ", newBallX.current);
+        console.log("the paddle y: ", player);
         if(newBallY.current > player){
             var amountYVelocity = newBallY.current - player;
             amountYVelocity = (amountYVelocity / 0.4) * Math.abs(newVelX.current);

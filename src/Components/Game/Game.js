@@ -37,7 +37,7 @@ const Game = ({currentUserReady, user}) => {
             {
                 doUpdate.current = true;
                 lastUpdate.current = time.current;
-                console.log('Time to update!');
+                // console.log('Time to update!');
             }
         }, 50);
         return () => clearInterval(interval);
