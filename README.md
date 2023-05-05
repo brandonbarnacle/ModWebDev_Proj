@@ -18,19 +18,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## What to do when the app opens
+If you are using the app for the first time, you will be prompted with a module to log in / sign up. If you have used the site before, you will be asked if you want to stay as the same user or if you would like to change users. Once you are logged in you are taken to the game screen where you will either be placed in an open game and start playing or you will wait for another player to join and then start playing. You then use the up and down arrow to move your paddle. The first player to score wins!
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
+## Things of note
+We use back4app for our backend which was not made to handle the amount of requests needed for this project which can lead to the app failing to connect to back4app and crashing on occasion. 

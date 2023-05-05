@@ -5,7 +5,7 @@ import vert from "../../Common/WebGL/Shaders/Pong/pong-vert.js";
 import frag from "../../Common/WebGL/Shaders/Pong/pong-frag.js";
 import React, { useEffect, useRef } from 'react';
 
-const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, updateYPlayerTwo, setIsWinner, setGameOver, isPlayerOne, velX, velY, ballX, ballY, playerOneScoreArg, playerTwoScoreArg, setPlayerTwoScore, setPlayerOneScore, setBallX, setBallY, setVelX, setVelY, tick}) => {
+const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, updateYPlayerTwo, setIsWinner, setGameOver, isPlayerOne}) => {
     // Variables for WedGL script
     var gl;
     var vertices = [];
@@ -18,28 +18,27 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
     var xPlayerOne;
     var xPlayerTwo;
 
+    // variable for running the game
     var gameOn;
 
-    const oneScore = useRef(0);
-    const twoScore = useRef(0);
-
+    // ball position variables
     const newBallX = useRef(0);
     const newBallY = useRef(0);
     const newVelX = useRef(0.1);
     const newVelY = useRef(0);
 
+    // variables for paddles
     const paddleOneY = useRef(0);
     const paddleTwoY = useRef(0);
     const paddleHit = useRef(0);
 
+    // variables for checking if we need to update game
     const doUpdate = useRef(true);
     const lastUpdate = useRef(0);
     const time = useRef();
-
     const timeInterval = 100;
 
-    console.log("am i player one?: ", isPlayerOne);
-
+    // sets the interval for us updating the game
     useEffect(() => {
         const interval = setInterval(() => {
             time.current = new Date().getTime();
@@ -47,7 +46,6 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
             {
                 doUpdate.current = true;
                 lastUpdate.current = time.current;
-                // console.log('Time to update the ball!');
             }
         }, 50);
         return () => clearInterval(interval);
@@ -93,7 +91,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
     u_vCenterLoc = gl.getUniformLocation( program, "u_vCenter" );
 
     // set up projection matrix
-    var u_projMatrixLoc = gl.getUniformLocation( program, "u_projMatrix" );
+    u_projMatrixLoc = gl.getUniformLocation( program, "u_projMatrix" );
     var projMatrix = perspective(53, 2.0, 2.0, 2.1);
     gl.uniformMatrix4fv(u_projMatrixLoc, false, flatten(projMatrix) );
 
@@ -120,7 +118,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
         // set up rest of ball points
         var increment = Math.PI/36;
         for (var theta=0.0; theta < Math.PI*2-increment; theta+=increment) {
-            if (theta==0.0) {
+            if (theta===0.0) {
                 vertices.push(vec2(Math.cos(theta)*radius, Math.sin(theta)*radius));
             }
             vertices.push(vec2(Math.cos(theta+increment)*radius, Math.sin(theta+increment)*radius));
@@ -155,8 +153,6 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
         else {
             gameOn = false;
         } 
-        
-        // console.log("start the game: ", startGame);
 
         // clear buffer
         gl.clear(gl.COLOR_BUFFER_BIT);
@@ -179,6 +175,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
         // the next 4 points are player one
         gl.drawArrays( gl.TRIANGLE_FAN, 78, 4 );
 
+        // only update the game if game is on and we should update
         if(gameOn && doUpdate.current){
             animate();
             doUpdate.current = false;
@@ -243,56 +240,20 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
             if(newBallX.current+extentBall >= 2.0) {
                 newVelY.current = 0.0;
                 newVelX.current = 0.0;
-                //console.log(oneScore.current);
-                //oneScore.current += 1;
-                //setPlayerOneScore(oneScore.current + 1);
                 document.getElementById("score").innerHTML = "Player One Won!";
                 gameOn = false;
                 setIsWinner(false);
                 setGameOver(true);
-                // if(isPlayerOne){
-                //     console.log("Am i player one? ", isPlayerOne);
-                //     console.log("setting winner");
-                //     setIsWinner(true);
-                //     setGameOver(true);
-                // }
-                //resetGame();
-
             } 
             if(newBallX.current-extentBall <= -2.0) {
                 newVelY.current = 0.0;
                 newVelX.current = 0.0;
-                //console.log(twoScore.current);
-                //twoScore.current += 1;
-                //setPlayerTwoScore(twoScore.current + 1);
                 document.getElementById("score").innerHTML = "Player Two Won!";
                 gameOn = false;
                 setIsWinner(true);
                 setGameOver(true);
-                // if(!isPlayerOne){
-                //     console.log("Am i player one? ", isPlayerOne);
-                //     setIsWinner(true);
-                //     setGameOver(true);
-                // }
-                //resetGame();
 
             }
-
-            // check if game won
-            // if(oneScore.current >= 3) {
-            //     gameOn = false;
-            //     if(playerOne === 0){
-            //         setIsWinner(true);
-            //     }
-            //     setGameOver(true);
-            // }
-            // if (twoScore.current >= 3){
-            //     gameOn = false;
-            //     if(playerOne === 1){
-            //         setIsWinner(true);
-            //     }
-            //     setGameOver(true);
-            // }
     }
   
     function checkKey(e){
@@ -347,38 +308,23 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
 
     }
 
-    function resetGame() {
-        gameOn = true;
-        newBallX.current = 0;
-        newBallY.current = 0;
-        if (playerOne === 0){
-            updateYPlayerOne(0);
-            paddleOneY.current = 0;
-        }
-        else {
-            updateYPlayerTwo(0);
-            paddleTwoY.current = 0;
-        } 
-    }
-
+    // the whole point of this function is to figure out how the ball should bounce after hitting the paddle
     function calcYVelocity(){
         var player;
-        console.log("which paddle hit: ", paddleHit.current);
+        var amountYVelocity;
         if (paddleHit.current === 0){
             player = paddleOneY.current;
         }
         else {
             player = paddleTwoY.current;
         }
-        console.log("the ball y: ", newBallY.current);
-        console.log("the paddle y: ", player);
         if(newBallY.current > player){
-            var amountYVelocity = newBallY.current - player;
+            amountYVelocity = newBallY.current - player;
             amountYVelocity = (amountYVelocity / 0.4) * Math.abs(newVelX.current);
             newVelY.current = amountYVelocity;
         }
         else if (newBallY.current < player){
-            var amountYVelocity = player - newBallY.current;
+            amountYVelocity = player - newBallY.current;
             amountYVelocity = (amountYVelocity / 0.4) * Math.abs(newVelX.current) * -1;
             newVelY.current = amountYVelocity;
         }
