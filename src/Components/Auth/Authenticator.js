@@ -34,6 +34,7 @@ const Authenticator = ({setCurrentUserReady, setGlobalUser, reset}) => {
         }
     }, []);
 
+    // On reset, set the display back to verify
     useEffect(() => {
         if (reset)
         {
@@ -42,6 +43,7 @@ const Authenticator = ({setCurrentUserReady, setGlobalUser, reset}) => {
         }
     }, [reset]);
 
+    // Tell the parent component who the current user is
     useEffect(() => {
         if (currentUser)
         {
@@ -49,10 +51,12 @@ const Authenticator = ({setCurrentUserReady, setGlobalUser, reset}) => {
         }
     }, [currentUser, setGlobalUser]);
 
+    // Tell the parent component the user is ready to start
     useEffect(()=>{
         setCurrentUserReady(readyUp);
     }, [readyUp, setCurrentUserReady])
 
+    // Login view
     if (displayType === 0)
     {
         return(
@@ -73,6 +77,7 @@ const Authenticator = ({setCurrentUserReady, setGlobalUser, reset}) => {
             </div>
         )
     }
+    // Register view
     else if(displayType === 1)
     {
         return(
@@ -94,6 +99,7 @@ const Authenticator = ({setCurrentUserReady, setGlobalUser, reset}) => {
             </div>
         )
     }
+    // Verify view
     else if(displayType === 2)
     {
         return(
@@ -111,12 +117,14 @@ const Authenticator = ({setCurrentUserReady, setGlobalUser, reset}) => {
             </div>
         )
     }
+    // Done
     else if(readyUp)
     {
         return(
             <div></div>
         );
     }
+    // Error
     else
     {
         return(

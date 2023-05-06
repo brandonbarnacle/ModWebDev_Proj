@@ -31,18 +31,24 @@ const LeaderboardChild = ({leaderboard, place, user}) => {
             <div class="leaderboard">
                 <div class="leaderboard-header"> 
                     <h1>Leaderboard</h1>
-                    <h4>Rank Name Wins</h4>
+                    <div class="username-wins-label">
+                        <h4 class="username-label">Username</h4>
+                        <h4 class="wins-label">Wins</h4>
+                    </div>
                 </div>
                 {leaderboard.length > 0 && (
                     <ol class="winners">
                       {leaderboard.map((leader) => (
-                        <li key={leader.id}>{leader.attributes['username']} {leader.attributes['wins']}</li>
+                        <li key={leader.id}>
+                            <p class="username">{leader.attributes['username']}</p>
+                            <p class="wins">{leader.attributes['wins']}</p>
+                        </li>
                     ))}
+                    <li key={user.id}>
+                        <p class="username">{user.attributes['username']}</p>
+                        <p class="wins">{user.attributes['wins']}</p>
+                    </li>
                     </ol>
-                )}
-                <p class="winners">Your Place</p>
-                {user && (
-                    <p class="winners">{place}. {user.attributes['username']} {user.attributes['wins']}</p>
                 )}
             </div>
         )

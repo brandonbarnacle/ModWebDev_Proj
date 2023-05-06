@@ -40,6 +40,7 @@ export const loginUser = (currUser) => {
     });
 };
 
+// Logout user
 export const logoutUser = () => {
     return Parse.User.logOut()
     .catch((error) => {
@@ -47,10 +48,12 @@ export const logoutUser = () => {
     });
 };
 
+// See if current user is authenticated
 export const checkUser = () => {
   return Parse.User.current()?.authenticated;
 };
 
+// Get current user
 export const currUser = () => {
     return Parse.User.current();
 }

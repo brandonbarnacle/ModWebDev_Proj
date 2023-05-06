@@ -1,3 +1,5 @@
+/* Styles for the authenticator component */
+
 .authenticator {
     display: flex;
     flex-direction: column;

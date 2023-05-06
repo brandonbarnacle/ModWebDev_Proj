@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import Pong from "../Pong/Pong.js";
-import { testSub, findAvailableMatchUp, setUpSubscription, setPlayerOnePos, setPlayerTwoPos, setWinner, setActive, setBallX, setBallY, setPlayerOneScore, setPlayerTwoScore, setVelX, setVelY } from "../../Common/Services/MatchUp.js";
+import { testSub, findAvailableMatchUp, setPlayerOnePos, setPlayerTwoPos, setWinner, setActive, setBallX, setBallY, setPlayerOneScore, setPlayerTwoScore, setVelX, setVelY } from "../../Common/Services/MatchUp.js";
 import '../../css/game.css';
 
 /* This module is a wrapper for whatever game is put in */
 const Game = ({currentUserReady, user}) => {
 
-    const [ currentPlayerLoaded, setCurrentPlayerLoaded ] = useState(false);
-    const [ otherPlayerLoaded, setOtherPlayerLoaded ] = useState(false);
-    const [ readyToStart, setReadyToStart ] = useState(false);
     const [ matchUp, setMatchUp ] = useState(null);
     const [ isPlayerOne, setIsPlayerOne ] = useState(false);
     const [ yPlayerOne, setYPlayerOne ] = useState(0);
@@ -30,6 +27,7 @@ const Game = ({currentUserReady, user}) => {
 
     const startTheGame = useRef(false);
 
+    // Set up ticks to slow down server calls
     useEffect(() => {
         const interval = setInterval(() => {
             time.current = new Date().getTime();
@@ -43,6 +41,15 @@ const Game = ({currentUserReady, user}) => {
         return () => clearInterval(interval);
     }, []);
 
+    // Check if game is over
+    useEffect(()=>{
+        if(gameOver)
+        {
+            console.log('Game Over!');
+        }
+    },[gameOver]);
+
+    // Read values from database
     useEffect(() => {
         if(matchUp){
             var testsub = testSub(matchUp);
@@ -64,7 +71,6 @@ const Game = ({currentUserReady, user}) => {
                     var playerTwo = object.get('playerTwo');
                     if (playerTwo)
                     {
-                        setReadyToStart(true);
                         startTheGame.current = true;
                     }
 
@@ -102,16 +108,15 @@ const Game = ({currentUserReady, user}) => {
               });
             console.log("the id: ", matchUp.id);
         }
-    }, [matchUp]);
+    }, [matchUp, yPlayerOne, yPlayerTwo]);
     
-    
+    // Game matching logic
     useEffect(()=>{
         if(currentUserReady && user)
         {
             findAvailableMatchUp(user)
             .then((newMatchUp)=>{
                 setMatchUp(newMatchUp);
-                setCurrentPlayerLoaded(true);
                 if (newMatchUp.attributes.playerOne.id === user.id)
                 {
                     setIsPlayerOne(true);
@@ -125,73 +130,7 @@ const Game = ({currentUserReady, user}) => {
         }
     }, [user, currentUserReady]);
 
-    useEffect(() => {
-        if (currentPlayerLoaded && !otherPlayerLoaded)
-        {
-            console.log('Current player ready, waiting for other player.');
-        }
-        else if (currentPlayerLoaded && !otherPlayerLoaded)
-        {
-            console.log('Both players ready!');
-        }
-    }, [currentPlayerLoaded, otherPlayerLoaded]);
-
-    // useEffect(()=>{
-    //     if (matchUp)
-    //     {
-    //         setPlayerOnePos(matchUp, yPlayerOne);
-    //     }
-    // }, [yPlayerOne, matchUp]);
-
-    // useEffect(()=>{
-    //     if (matchUp)
-    //     {
-    //         setPlayerTwoPos(matchUp, yPlayerTwo);
-    //     }
-    // }, [yPlayerTwo, matchUp]);
-
-    // useEffect(()=>{
-    //     if (matchUp)
-    //     {
-    //         setVelX(matchUp, velXState);
-    //     }
-    // }, [velXState, matchUp]);
-
-    // useEffect(()=>{
-    //     if (matchUp)
-    //     {
-    //         setVelY(matchUp, velYState);
-    //     }
-    // }, [velYState, matchUp]);
-
-    // useEffect(()=>{
-    //     if (matchUp)
-    //     {
-    //         setBallX(matchUp, ballXState);
-    //     }
-    // }, [ballXState, matchUp]);
-
-    // useEffect(()=>{
-    //     if (matchUp)
-    //     {
-    //         setBallY(matchUp, ballYState);
-    //     }
-    // }, [ballYState, matchUp]);
-
-    // useEffect(()=>{
-    //     if (matchUp)
-    //     {
-    //         setPlayerOneScore(matchUp, playerOneScoreState);
-    //     }
-    // }, [playerOneScoreState, matchUp]);
-
-    // useEffect(()=>{
-    //     if (matchUp)
-    //     {
-    //         setPlayerTwoScore(matchUp, playerTwoScoreState);
-    //     }
-    // }, [playerTwoScoreState, matchUp]);
-
+    // Game is over, update database
     useEffect(()=>{
         if (matchUp && isWinner)
         {
@@ -204,7 +143,7 @@ const Game = ({currentUserReady, user}) => {
         <div class="game">
             <canvas id="gl-canvas" width="1024" height="512"></canvas>
             <div class="scorebar">
-                <h1 id="score"></h1>
+                <h1 id="score">Loading...</h1>
             </div>
             <Pong 
                 yPlayerOneArg={yPlayerOne}

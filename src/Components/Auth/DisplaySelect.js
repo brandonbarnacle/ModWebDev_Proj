@@ -3,6 +3,7 @@ import '../../css/display-select.css';
 
 const DisplaySelect = ({setDisplayType, displayType}) => {
 
+    // When the login screen is active
     if(displayType === 0)
     {
         return(
@@ -24,6 +25,8 @@ const DisplaySelect = ({setDisplayType, displayType}) => {
             </div>
         );
     }
+
+    // When the register screen is active
     else if(displayType === 1)
     {
         return(

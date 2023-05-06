@@ -85,7 +85,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
     u_vCenterLoc = gl.getUniformLocation( program, "u_vCenter" );
 
     // set up projection matrix
-    var u_projMatrixLoc = gl.getUniformLocation( program, "u_projMatrix" );
+    u_projMatrixLoc = gl.getUniformLocation( program, "u_projMatrix" );
     var projMatrix = perspective(53, 2.0, 2.0, 2.1);
     gl.uniformMatrix4fv(u_projMatrixLoc, false, flatten(projMatrix) );
 
@@ -112,7 +112,7 @@ const Pong = ({yPlayerOneArg, yPlayerTwoArg, startGame, updateYPlayerOne, update
         // set up rest of ball points
         var increment = Math.PI/36;
         for (var theta=0.0; theta < Math.PI*2-increment; theta+=increment) {
-            if (theta==0.0) {
+            if (theta===0.0) {
                 vertices.push(vec2(Math.cos(theta)*radius, Math.sin(theta)*radius));
             }
             vertices.push(vec2(Math.cos(theta+increment)*radius, Math.sin(theta+increment)*radius));

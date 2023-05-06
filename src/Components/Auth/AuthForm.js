@@ -3,6 +3,7 @@ import '../../css/auth-form.css';
 
 const AuthForm = ({ user, isLogin, onChange, onSubmit }) => {
 
+    // Allow user to login or register
   return (
     <form onSubmit={onSubmit} autoComplete="off" class="authform">
     {!isLogin ? 
