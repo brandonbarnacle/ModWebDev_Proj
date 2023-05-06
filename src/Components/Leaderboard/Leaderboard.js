@@ -34,7 +34,7 @@ const Leaderboard = () => {
             }
             setWinners(leaderboard);
         }); 
-    }, []);
+    }, [currentUser]);
 
     return (
         <LeaderboardChild leaderboard={winners} place={place} user={user}/>

@@ -39,6 +39,14 @@ const LoginForm = ({setDisplayType, setCurrentUser}) => {
       }
     }, [newUser, submit, setDisplayType, setCurrentUser]);
   
+    // Show errors
+    useEffect(()=>{
+        if(showErr)
+        {
+            console.log('An error ocurred!');
+        }
+    },[showErr]);
+
     const onChangeHandler = (e) => {
         e.preventDefault();
         console.log(e.target);
