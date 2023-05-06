@@ -3,8 +3,6 @@ import React, {useEffect, useState} from "react";
 import LeaderboardChild from "./LeaderboardChild";
 
 const Leaderboard = () => {
-    // get all users
-    var query = new Parse.Query("User");
 
     // set variables to see if current user is on leader board
     var currentUser = Parse.User.current();
@@ -14,13 +12,15 @@ const Leaderboard = () => {
     const [user, setUser] = useState();
     const [place, setPlace] = useState();
 
-    // leaderboard players
-    var leaderboard = [];
-
-
     // search
     useEffect(() => {
+        // get all users
+        var query = new Parse.Query("User");
+
         query.descending("wins").find().then((results) => {
+            // leaderboard players
+            var leaderboard = [];
+
             for(var iter = 0; iter < results.length; iter++){
                 if (iter < 5){
                     if (leaderboard.length < 5){
