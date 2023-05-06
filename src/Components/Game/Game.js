@@ -131,7 +131,6 @@ const Game = ({currentUserReady, user}) => {
     }, [user, currentUserReady]);
 
     //  Game is over, update database
-
     useEffect(()=>{
         if (matchUp && gameOver)
         {
