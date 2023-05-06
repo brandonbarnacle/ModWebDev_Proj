@@ -4,6 +4,7 @@ import '../../css/verify-form.css';
 
 const VerifyForm = ({setDisplayType, user, setReadyUp}) => {
     
+    // Handler for logout
     const switchHandler = () => {
         logoutUser()
         .then(()=>{
@@ -11,6 +12,7 @@ const VerifyForm = ({setDisplayType, user, setReadyUp}) => {
         });
     }
 
+    // Handler for ready
     const readyHandler = () => {
         setDisplayType(3);
         setReadyUp(true);
